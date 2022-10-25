@@ -1,3 +1,4 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import { Redirect } from 'expo-router';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,6 +15,7 @@ import {
 import AddConnection from './screens/AddConnection';
 import CreateNew from './screens/CreateNew';
 import Help from './screens/Help';
+import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import Settings from './screens/Settings';
@@ -23,6 +25,7 @@ import Treats from './screens/Treats';
 import { colors, spacing } from './utils/globalStyleObjects';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
@@ -31,6 +34,7 @@ export default function App() {
         <StatusBar style="light" />
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Start">
+            <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Start" component={Start} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
