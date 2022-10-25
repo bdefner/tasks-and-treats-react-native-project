@@ -5,15 +5,20 @@ export default function Start() {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <View style={styles.screen}>
       <Text>Welcome to Tasks & Treats</Text>
       <Button
         title="Login"
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.navigate('Login');
         }}
       />
-      <Button title="Register" />
+      <Button
+        title="Register"
+        onPress={() => {
+          navigation.navigate('Register');
+        }}
+      />
     </View>
   );
 }
