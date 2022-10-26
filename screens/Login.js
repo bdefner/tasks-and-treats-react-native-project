@@ -9,7 +9,7 @@ export default function Login() {
       <Button
         title="Login"
         onPress={() => {
-          navigation.navigate('Home');
+          navigation.navigate('TabBar');
         }}
       />
     </View>
