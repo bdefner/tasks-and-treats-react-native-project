@@ -2,63 +2,57 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
 import TabBar from './components/TabBar';
-import AddConnection from './screens/AddConnection';
-import CreateNew from './screens/CreateNew';
-import Help from './screens/Help';
-import Login from './screens/Login';
-import Register from './screens/Register';
-import Settings from './screens/Settings';
-import Start from './screens/Start';
-import Tasks from './screens/Tasks';
-import Treats from './screens/Treats';
-import { colors, spacing } from './utils/globalStyleObjects';
+import LoginScreen from './screens/LoginScreen';
+import SignupScreen from './screens/SignupScreen';
+import WelcomeScreen from './screens/WelcomeScreen';
 
 const Stack = createNativeStackNavigator();
+
+function AuthStack() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  return (
+    <Stack.Navigator initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}>
+      <Stack.Screen
+        name="WelcomeScreen"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={SignupScreen} />
+      <Stack.Screen name="TabBar" component={TabBar} />
+    </Stack.Navigator>
+  );
+}
+
+function AuthenticatedStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: 'white',
+        contentStyle: { backgroundColor: Colors.primary100 },
+      }}
+    >
+      <Stack.Screen name="TabBar" component={TabBar} />
+    </Stack.Navigator>
+  );
+}
+
+function Navigation() {
+  return (
+    <NavigationContainer>
+      <AuthStack />
+    </NavigationContainer>
+  );
+}
 
 export default function App() {
   return (
     <>
-      <View style={styles.screen}>
-        <StatusBar style="light" />
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Start">
-            <Stack.Screen
-              name="TabBar"
-              component={TabBar}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Start"
-              component={Start}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Tasks" component={Tasks} />
-            <Stack.Screen name="Treats" component={Treats} />
-            <Stack.Screen name="CreateNew" component={CreateNew} />
-            <Stack.Screen name="AddConnection" component={AddConnection} />
-            <Stack.Screen name="Settings" component={Settings} />
-            <Stack.Screen name="Help" component={Help} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </View>
+      <StatusBar style="light" />
+      <Navigation />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    paddingTop: spacing.medium_2,
-  },
-});

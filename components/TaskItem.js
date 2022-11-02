@@ -1,7 +1,7 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { cartItemStyles } from '../utils/cardItemStyles.js';
-import { buttonStyles, colors, font } from '../utils/globalStyleObjects';
+import { buttonStyles, colors, font } from '../utils/styleConstants';
 
 export default function TaskList(props) {
   return (

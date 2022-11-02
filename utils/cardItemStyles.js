@@ -1,4 +1,4 @@
-import { buttonGreenSecondary, colors, spacing } from './globalStyleObjects';
+import { buttonGreenSecondary, colors, spacing } from './styleConstants';
 
 export const cartItemStyles = {
   padding: spacing.medium_1,

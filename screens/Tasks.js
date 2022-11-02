@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   FlatList,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -9,12 +10,15 @@ import {
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import TaskItem from '../components/TaskItem';
-import { colors, spacing } from '../utils/globalStyleObjects';
+// import { carts } from '../database/carts';
+// import { groups } from '../database/groups';
+import { colors, spacing } from '../utils/styleConstants';
 
-export default function TaskList() {
+export default function TaskList(props) {
   const [taskInput, setTaskInput] = useState('');
-  const [tasks, setTasks] = useState([]);
+  const [CurrentTasks, setCurrentTasks] = useState([]);
   const [ratingInput, setRatingInput] = useState(5);
+  const [currentCartId, setCurrentCartId] = useState(1);
 
   function taskInputHandler(input) {
     setTaskInput(input);
@@ -32,29 +36,68 @@ export default function TaskList() {
     ]);
   }
 
+  console.log('props.groups', props.groups);
+
   return (
     <View style={styles.screen}>
-      <View style={styles.topNavigation}>
-        <Text>Top navigation</Text>
+      {/* On top horizontal scroll navigation */}
+
+      <View>
+        {/* <FlatList
+          horizontal={true}
+          data={groups}
+          renderItem={(group) => {
+            return (
+              <Pressable
+                onPress={() => {
+                  setCurrentCartId(group.item.id);
+                }}
+                style={{
+                  margin: spacing.medium_1,
+                  padding: spacing.small,
+                  borderWidth: 1,
+                  borderRadius: spacing.small,
+                  backgroundColor:
+                    group.item.id === currentCartId ? colors.green_1 : 'white',
+                  borderColor: colors.green_1,
+                }}
+              >
+                <Text
+                  style={{
+                    color:
+                      group.item.id === currentCartId
+                        ? 'white'
+                        : colors.green_1,
+                  }}
+                >
+                  {group.item.name}
+                </Text>
+              </Pressable>
+            );
+          }}
+        /> */}
       </View>
       <View style={styles.itemListContainer}>
-        <FlatList
-          data={tasks}
-          renderItem={(data) => {
+        {/* <FlatList
+          data={carts}
+          renderItem={(cart) => {
+            if (cart.item.cartId !== currentCartId) {
+              return;
+            }
             return (
               <TaskItem
-                text={data.item.text}
-                id={data.item.id}
-                rating={data.item.rating}
+                text={cart.item.text}
+                id={cart.item.id}
+                rating={cart.item.rating}
               />
             );
           }}
           keyExtractor={(item, index) => {
             return item.id;
           }}
-        />
+        /> */}
       </View>
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <View style={styles.rowOfInputs}>
           <View>
             <View style={styles.tasksInput}>
@@ -75,7 +118,7 @@ export default function TaskList() {
           </View>
           <Button title="Add Task" onPress={addTaskHandler} />
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }
@@ -85,15 +128,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  topNavigation: {
-    flex: 1,
+  topNavigationItem: {
+    margin: spacing.medium_1,
     padding: spacing.small,
     borderWidth: 1,
+    borderRadius: spacing.small,
   },
   itemListContainer: {
-    flex: 3,
+    flex: 8,
     padding: spacing.medium_1,
-    borderWidth: 1,
+    borderWidth: 0,
   },
 
   inputContainer: {

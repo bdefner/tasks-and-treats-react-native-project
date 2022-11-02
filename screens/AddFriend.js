@@ -1,22 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-export default function Start() {
+export default function AddFriend() {
   const navigation = useNavigation();
-
   return (
     <View style={styles.screen}>
-      <Text>Welcome to Tasks & Treats</Text>
+      <Text>CreateNew Screen</Text>
       <Button
-        title="Login"
+        title="Add"
         onPress={() => {
-          navigation.navigate('Login');
-        }}
-      />
-      <Button
-        title="Register"
-        onPress={() => {
-          navigation.navigate('Register');
+          navigation.navigate('CreateNew');
         }}
       />
     </View>
