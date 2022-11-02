@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+// import axios from 'axios';
 import { useState } from 'react';
 import {
   Button,
@@ -12,23 +13,31 @@ import {
 import { buttonStyles, colors, spacing } from '../utils/styleConstants';
 
 async function signupHandler() {
-  const apiBaseUrl = 'http://localhost:3000/api/';
-
-  const registerResponse = await fetch(`${apiBaseUrl}/signup`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({
-      username,
-      email,
-      password,
-    }),
-  });
-  const registerResponseBody = registerResponse.json();
-
-  console.log(registerResponseBody);
-
-  // After registration is completed, navigate to the App
-  // navigation.replace('TabBar');
+  // const apiBaseUrl = 'http://localhost:3000/api/signup';
+  // const response = await fetch(apiBaseUrl, {
+  //   method: 'POST',
+  //   headers: { 'Access-Control-Allow-Origin': ' http://localhost:3000' },
+  //   body: {
+  //     username: 'Test Name',
+  //     email: 'not@real.at',
+  //     password: '123abc',
+  //   },
+  // });
+  // return response.json();
+  // const response = await axios
+  //   .post(apiBaseUrl, {
+  //     username: 'Dada',
+  //     email: 'tata@tc.to',
+  //     password: 'abc123',
+  //   })
+  //   .then(function (response) {
+  //     console.log(response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error).finally(function () {
+  //       console.log('Request sent');
+  //     });
+  //   });
 }
 
 export default function Signup() {
@@ -79,12 +88,20 @@ export default function Signup() {
       <View>
         <Pressable
           style={buttonStyles.purplePrimary}
-          onPress={() => {
-            signupHandler();
-          }}
+          // onPress={() => {
+          //   signupHandler();
+          // }}
         >
           <Text style={{ color: 'white' }}>Signup</Text>
         </Pressable>
+      </View>
+      <View>
+        <Text>
+          Security notice: Your passwords are not saved or sent anywhere by this
+          app. Your passwords get encrypted by using bcrypt and saved as
+          password hashes. Also, currently there's no way for you to reset your
+          password. This feature is on my ToDo list...{' '}
+        </Text>
       </View>
     </View>
   );
