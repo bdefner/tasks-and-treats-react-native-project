@@ -21,8 +21,11 @@ function CreateNewStackScreen() {
   );
 }
 
-export default function TabBar() {
+export default function TabBar(carts) {
   const Tab = createBottomTabNavigator();
+
+  // parsedCart = JSON.parse(carts);
+  console.log('carts in TabBar', carts.route.params.carts);
 
   return (
     <Tab.Navigator
@@ -30,6 +33,7 @@ export default function TabBar() {
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBarStyle,
+        headerShown: false,
       }}
     >
       <Tab.Screen
@@ -58,7 +62,9 @@ export default function TabBar() {
       <Tab.Screen
         name="Tasks"
         component={Tasks}
+        initialParams={{ carts: carts }}
         options={{
+          headerShown: false,
           tabBarIcon: () => (
             <View
               style={{

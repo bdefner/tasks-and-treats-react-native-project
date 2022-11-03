@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import TabBar from './components/TabBar';
+import FetchUserDataAndRedirectScreen from './screens/FetchUserDataAndRedirectScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
@@ -13,15 +14,29 @@ function AuthStack() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <Stack.Navigator initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}>
+    <Stack.Navigator
+      initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}
+      // screenOptions={{
+      //   headerShown: false,
+      // }}
+    >
       <Stack.Screen
         name="WelcomeScreen"
         component={WelcomeScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={SignupScreen} />
-      <Stack.Screen name="TabBar" component={TabBar} />
+      <Stack.Screen name="Signup" component={SignupScreen} />
+      <Stack.Screen
+        name="FetchUserDataAndRedirect"
+        component={FetchUserDataAndRedirectScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TabBar"
+        component={TabBar}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -51,7 +66,7 @@ function Navigation() {
 export default function App() {
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Navigation />
     </>
   );

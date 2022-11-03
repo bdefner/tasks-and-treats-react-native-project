@@ -14,7 +14,7 @@ import TaskItem from '../components/TaskItem';
 // import { groups } from '../database/groups';
 import { colors, spacing } from '../utils/styleConstants';
 
-export default function TaskList(props) {
+export default function TaskList({ route }) {
   const [taskInput, setTaskInput] = useState('');
   const [CurrentTasks, setCurrentTasks] = useState([]);
   const [ratingInput, setRatingInput] = useState(5);
@@ -36,10 +36,11 @@ export default function TaskList(props) {
     ]);
   }
 
-  console.log('props.groups', props.groups);
+  console.log('Here we go', route.params.carts);
 
   return (
     <View style={styles.screen}>
+      <Text>{JSON.stringify(route.params.carts)}</Text>
       {/* On top horizontal scroll navigation */}
 
       <View>

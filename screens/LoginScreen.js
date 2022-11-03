@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import { useState } from 'react';
 import {
   Button,
@@ -13,9 +12,6 @@ import {
 import { buttonStyles, colors, spacing } from '../utils/styleConstants';
 
 async function handleLogin(username, password) {
-  console.log('username', username);
-  console.log('password', password);
-
   const apiBaseUrl = 'http://localhost:3000/api/login';
 
   try {
@@ -101,7 +97,7 @@ export default function Login() {
             console.log('loginResponse', loginResponse);
 
             if (loginResponse === true) {
-              setErrorMessage('SUCCESS');
+              navigation.replace('FetchUserDataAndRedirect');
             } else {
               setErrorMessage('Username or password is incorrect.');
             }

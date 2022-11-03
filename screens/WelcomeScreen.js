@@ -34,7 +34,7 @@ export default function Welcome() {
       <Button
         title="Signup"
         onPress={() => {
-          navigation.navigate('Register');
+          navigation.navigate('Signup');
         }}
       />
     </View>
