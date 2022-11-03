@@ -1,4 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { useState } from 'react';
 import {
   Button,
   Image,
@@ -10,8 +12,62 @@ import {
 } from 'react-native';
 import { buttonStyles, colors, spacing } from '../utils/styleConstants';
 
+async function handleLogin(username, password) {
+  console.log('username', username);
+  console.log('password', password);
+
+  const apiBaseUrl = 'http://localhost:3000/api/login';
+
+  try {
+    const response = await fetch(apiBaseUrl, {
+      method: 'POST',
+      header: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        mode: 'no-cors',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    });
+    const json = await response.json();
+    console.log('json.user?.username', json.user?.username);
+
+    if (!json.user?.username === 'undefined') {
+      return false;
+    } else if (json.user?.username === username) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// const response = await fetch(apiBaseUrl, {
+//   method: 'POST',
+//   header: {
+//     Accept: 'application/json',
+//     'content-type': 'application/json',
+//     mode: 'no-cors',
+//   },
+//   body: JSON.stringify({
+//     username: username,
+//     password: password,
+//   }),
+// }).catch(() => {
+//   console.log('What is wrong?');
+// });
+
 export default function Login() {
   const navigation = useNavigation();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <View style={styles.screen}>
       <View>
@@ -21,17 +77,35 @@ export default function Login() {
           style={styles.welcomeImg}
         />
         <View style={styles.inputFieldWrap}>
-          <TextInput style={styles.inputField} placeholder="username" />
+          <TextInput
+            style={styles.inputField}
+            placeholder="username"
+            onChangeText={setUsername}
+          />
         </View>
         <View style={styles.inputFieldWrap}>
-          <TextInput style={styles.inputField} placeholder="password" />
+          <TextInput
+            style={styles.inputField}
+            placeholder="password"
+            onChangeText={setPassword}
+          />
         </View>
       </View>
+      <Text>{errorMessage}</Text>
       <View>
         <Pressable
           style={buttonStyles.greenPrimary}
-          onPress={() => {
-            navigation.replace('TabBar');
+          onPress={async () => {
+            const loginResponse = await handleLogin(username, password);
+
+            console.log('loginResponse', loginResponse);
+
+            if (loginResponse === true) {
+              setErrorMessage('SUCCESS');
+            } else {
+              setErrorMessage('Username or password is incorrect.');
+            }
+            // navigation.replace('TabBar');
           }}
         >
           <Text style={{ color: 'white' }}>Login</Text>

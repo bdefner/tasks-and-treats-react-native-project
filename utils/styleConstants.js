@@ -17,12 +17,14 @@ export const colors = {
   green_2: '#64de87',
   green_3: '#97e9af',
   purple_1: '#8D40CA',
+  redAlert: '#ea3c59',
 };
 
 export const font = {
-  size_1: 8,
+  size_1: 10,
   size_2: 16,
   size_3: 24,
+  size_4: 32,
 };
 
 export const shadow = {
