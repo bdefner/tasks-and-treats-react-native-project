@@ -26,19 +26,18 @@ async function fetchUserCarts(userId) {
   }
 }
 
-export default function FetchUserDataAndRedirect(props) {
+export default function FetchUserDataAndRedirect({ route }) {
   const navigation = useNavigation();
-  const userId = 1;
+  const userId = route.params.user.userId;
   let carts = [];
 
   useEffect(async () => {
     carts = await fetchUserCarts(userId);
-    console.log('carts in Frontend: ', carts);
   }, []);
 
   setTimeout(() => {
-    navigation.navigate('TabBar', { carts: carts });
-  }, 2500);
+    navigation.navigate('TabBar', { carts: carts, user: route.params.user });
+  }, 3100);
 
   return (
     <Lottie

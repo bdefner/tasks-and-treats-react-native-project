@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AddFriend from '../screens/AddFriend';
 import CreateNew from '../screens/CreateNew';
@@ -21,11 +21,12 @@ function CreateNewStackScreen() {
   );
 }
 
-export default function TabBar(carts) {
+export default function TabBar({ route }) {
   const Tab = createBottomTabNavigator();
 
   // parsedCart = JSON.parse(carts);
-  console.log('carts in TabBar', carts.route.params.carts);
+  console.log('carts in TabBar', route.params.carts);
+  const [carts, setCarts] = useState(route.params.carts);
 
   return (
     <Tab.Navigator
@@ -108,6 +109,7 @@ export default function TabBar(carts) {
       <Tab.Screen
         name="Treats"
         component={Treats}
+        initialParams={{ carts: carts }}
         options={{
           tabBarIcon: () => (
             <View
@@ -176,11 +178,12 @@ const styles = StyleSheet.create({
     top: -15,
   },
   tabBarStyle: {
+    alignItems: 'baseline',
     position: 'absolute',
     bottom: spacing.small,
     borderRadius: spacing.medium_1,
-    height: 70,
     margin: spacing.medium_1,
+    padding: spacing.small,
     ...shadow,
   },
   navIconStyle: {

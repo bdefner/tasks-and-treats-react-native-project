@@ -12,13 +12,22 @@ import { Rating } from 'react-native-ratings';
 import TaskItem from '../components/TaskItem';
 // import { carts } from '../database/carts';
 // import { groups } from '../database/groups';
-import { colors, spacing } from '../utils/styleConstants';
+import { colors, font, spacing } from '../utils/styleConstants';
+
+function filterCartsForPersonalTasks(carts) {
+  const filteredCarts = carts.filter((item) => {
+    return item.typeId === 1 && !item.groupId;
+  });
+  return filteredCarts;
+}
 
 export default function TaskList({ route }) {
   const [taskInput, setTaskInput] = useState('');
   const [CurrentTasks, setCurrentTasks] = useState([]);
   const [ratingInput, setRatingInput] = useState(5);
   const [currentCartId, setCurrentCartId] = useState(1);
+
+  const currentCarts = filterCartsForPersonalTasks(route.params.carts);
 
   function taskInputHandler(input) {
     setTaskInput(input);
@@ -36,11 +45,11 @@ export default function TaskList({ route }) {
     ]);
   }
 
-  console.log('Here we go', route.params.carts);
-
   return (
     <View style={styles.screen}>
-      <Text>{JSON.stringify(route.params.carts)}</Text>
+      <View style={styles.headerWrap}>
+        <Text style={styles.headerText}>Tasks</Text>
+      </View>
       {/* On top horizontal scroll navigation */}
 
       <View>
@@ -78,25 +87,24 @@ export default function TaskList({ route }) {
           }}
         /> */}
       </View>
+
       <View style={styles.itemListContainer}>
-        {/* <FlatList
-          data={carts}
+        <FlatList
+          data={currentCarts}
           renderItem={(cart) => {
-            if (cart.item.cartId !== currentCartId) {
-              return;
-            }
             return (
               <TaskItem
-                text={cart.item.text}
-                id={cart.item.id}
+                text={cart.item.label}
+                id={cart.item.cartid}
                 rating={cart.item.rating}
+                typeId={cart.item.typeId}
               />
             );
           }}
           keyExtractor={(item, index) => {
-            return item.id;
+            return item.cartid;
           }}
-        /> */}
+        />
       </View>
       {/* <View style={styles.inputContainer}>
         <View style={styles.rowOfInputs}>
@@ -161,5 +169,18 @@ const styles = StyleSheet.create({
   },
   ratingContainer: {
     flex: 1,
+  },
+  headerWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.medium_1,
+    backgroundColor: colors.green_1,
+    borderBottomColor: colors.greyBorder,
+    borderBottomWidth: 2,
+  },
+  headerText: {
+    marginTop: spacing.large_2,
+    fontSize: font.size_4,
+    color: 'white',
   },
 });

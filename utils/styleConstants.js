@@ -18,6 +18,7 @@ export const colors = {
   green_3: '#97e9af',
   purple_1: '#8D40CA',
   redAlert: '#ea3c59',
+  greyBorder: '#e1e1e1',
 };
 
 export const font = {

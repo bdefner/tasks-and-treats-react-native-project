@@ -28,12 +28,12 @@ async function handleLogin(username, password) {
       }),
     });
     const json = await response.json();
-    console.log('json.user?.username', json.user?.username);
+    console.log('json.user?.username', json.user);
 
     if (!json.user?.username === 'undefined') {
       return false;
     } else if (json.user?.username === username) {
-      return true;
+      return json.user;
     } else {
       return false;
     }
@@ -96,12 +96,13 @@ export default function Login() {
 
             console.log('loginResponse', loginResponse);
 
-            if (loginResponse === true) {
-              navigation.replace('FetchUserDataAndRedirect');
-            } else {
+            if (!loginResponse) {
               setErrorMessage('Username or password is incorrect.');
+            } else {
+              navigation.replace('FetchUserDataAndRedirect', {
+                user: loginResponse,
+              });
             }
-            // navigation.replace('TabBar');
           }}
         >
           <Text style={{ color: 'white' }}>Login</Text>

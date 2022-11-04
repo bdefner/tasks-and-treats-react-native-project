@@ -4,8 +4,16 @@ import { cartItemStyles } from '../utils/cardItemStyles.js';
 import { buttonStyles, colors, font } from '../utils/styleConstants';
 
 export default function TaskList(props) {
+  console.log('props.typeId: ', props.typeId);
   return (
-    <View style={styles.taskItemContainer}>
+    <View
+      style={{
+        backgroundColor: props.typeId === 1 ? colors.green_1 : colors.purple_1,
+        padding: cartItemStyles.padding,
+        margin: cartItemStyles.margin,
+        borderRadius: cartItemStyles.borderRadius,
+      }}
+    >
       <View>
         <Text style={styles.taskItemText}>{props.text}</Text>
       </View>
@@ -14,7 +22,7 @@ export default function TaskList(props) {
           type="star"
           ratingCount={props.rating}
           imageSize={17}
-          tintColor={colors.green_1}
+          tintColor={props.typeId === 1 ? colors.green_1 : colors.purple_1}
           // onFinishRating={ratingCompleted}
         />
         <View style={buttonStyles.greenSecondary}>
@@ -27,10 +35,9 @@ export default function TaskList(props) {
 
 const styles = StyleSheet.create({
   taskItemContainer: {
-    padding: cartItemStyles.padding,
-    margin: cartItemStyles.margin,
-    backgroundColor: colors.green_1,
-    borderRadius: cartItemStyles.borderRadius,
+    // padding: cartItemStyles.padding,
+    // margin: cartItemStyles.margin,
+    // borderRadius: cartItemStyles.borderRadius,
   },
   taskItemText: {
     color: 'white',
