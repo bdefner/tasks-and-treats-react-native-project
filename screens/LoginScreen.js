@@ -42,21 +42,6 @@ async function handleLogin(username, password) {
   }
 }
 
-// const response = await fetch(apiBaseUrl, {
-//   method: 'POST',
-//   header: {
-//     Accept: 'application/json',
-//     'content-type': 'application/json',
-//     mode: 'no-cors',
-//   },
-//   body: JSON.stringify({
-//     username: username,
-//     password: password,
-//   }),
-// }).catch(() => {
-//   console.log('What is wrong?');
-// });
-
 export default function Login() {
   const navigation = useNavigation();
   const [username, setUsername] = useState('');

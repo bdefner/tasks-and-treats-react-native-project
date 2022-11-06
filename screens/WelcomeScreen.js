@@ -2,9 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import TabBar from '../components/TabBar';
+import AuthWrap from '../components/AuthWrap';
 import { colors, font, spacing } from '../utils/styleConstants';
 
+
 export default function Welcome() {
+
+
   const navigation = useNavigation();
 
   return (
@@ -17,6 +21,7 @@ export default function Welcome() {
       />
       <Text>A productivity app that's fun to use</Text>
       <View style={styles.buttonWrap}>
+        <AuthWrap />
         <View style={styles.button}>
           <Button
             title="Login"

@@ -7,6 +7,7 @@ import FetchUserDataAndRedirectScreen from './screens/FetchUserDataAndRedirectSc
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +65,8 @@ function Navigation() {
 }
 
 export default function App() {
+
+
   return (
     <>
       <StatusBar style="dark" />

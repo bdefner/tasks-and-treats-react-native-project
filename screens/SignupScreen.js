@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { buttonStyles, colors, font, spacing } from '../utils/styleConstants';
+import * as SecureStore from 'expo-secure-store';
 
 async function signupHandler(username, email, passwordHash) {
   const apiBaseUrl = 'http://localhost:3000/api/signup';
@@ -29,44 +30,28 @@ async function signupHandler(username, email, passwordHash) {
       }),
     });
     const json = await response.json();
-    console.log(JSON.stringify(json));
-    return json.user.username;
+
+
+    // check if there is already a token stored and replace it
+
+    const tokenTest = await SecureStore.getItemAsync('sessionToken');
+
+    console.log('Token before check: ', tokenTest);
+
+    if (tokenTest) {
+      SecureStore.deleteItemAsync("sessionToken")
+      .catch(error => console.log("Could not delete sessionToken ", error));
+    }
+
+    await SecureStore.setItemAsync('sessionToken', json.user.sessionToken);
+
+    return json.user;
+
   } catch (error) {
     console.error(error);
   }
 }
 
-// const response = await fetch(apiBaseUrl, {
-//   method: 'POST',
-//   headers: {
-//     Accept: 'application/json',
-//     'content-type': 'application/json',
-//     mode: 'no-cors',
-//   },
-//   body: JSON.stringify({
-//     username: username,
-//     email: email,
-//     password: passwordHash,
-//   }),
-// }).catch((error) => console.log(error));
-
-// console.log('response', response.json());
-// return response.json();
-
-// const response = await axios
-//   .post(apiBaseUrl, {
-//     username: 'Dada',
-//     email: 'tata@tc.to',
-//     password: 'abc123',
-//   })
-//   .then(function (response) {
-//     console.log(response);
-//   })
-//   .catch(function (error) {
-//     console.log(error).finally(function () {
-//       console.log('Request sent');
-//     });
-//   });
 
 export default function Signup() {
   const [username, setUsername] = useState('');
@@ -76,6 +61,7 @@ export default function Signup() {
   const [passwordTest, setPasswordTest] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [infoTextVisible, setInfoTextVisible] = useState(false);
+
 
   const navigation = useNavigation();
   return (
@@ -123,11 +109,13 @@ export default function Signup() {
       <View>
         <Pressable
           style={buttonStyles.purplePrimary}
-          onPress={() => {
+          onPress={async () => {
             if (password !== passwordTest) {
               setPasswordError("Repeated password doesn't match!");
             } else {
-              signupHandler(username, email, password);
+             const userData = await signupHandler(username, email, password);
+             console.log('userData:', userData )
+
             }
           }}
         >
