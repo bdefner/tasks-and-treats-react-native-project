@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 async function fetchUserCarts(userId) {
   const apiBaseUrl = 'http://localhost:3000/api/carts';

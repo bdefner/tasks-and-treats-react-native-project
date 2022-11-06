@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import { TypeFlags } from 'typescript';
 import TabBar from '../components/TabBar';
 import { colors, font, spacing } from '../utils/styleConstants';
 
