@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import CartsContext from '../components/CartsContext';
 import TaskItem from '../components/TaskItem';
 // import { carts } from '../database/carts';
 // import { groups } from '../database/groups';
@@ -26,8 +27,9 @@ export default function TaskList({ route }) {
   const [CurrentTasks, setCurrentTasks] = useState([]);
   const [ratingInput, setRatingInput] = useState(5);
   const [currentCartId, setCurrentCartId] = useState(1);
+  const [carts, setCarts] = useContext(CartsContext);
 
-  const currentCarts = filterCartsForPersonalTreats(route.params.carts);
+  const currentCarts = filterCartsForPersonalTreats(carts);
 
   function taskInputHandler(input) {
     setTaskInput(input);
@@ -90,6 +92,7 @@ export default function TaskList({ route }) {
       <View style={styles.itemListContainer}>
         <FlatList
           data={currentCarts}
+          keyExtractor={(item) => item.id}
           renderItem={(cart) => {
             return (
               <TaskItem
@@ -100,9 +103,9 @@ export default function TaskList({ route }) {
               />
             );
           }}
-          keyExtractor={(item, index) => {
-            return item.cartid;
-          }}
+          // keyExtractor={(item, index) => {
+          //   return item.cartid;
+          // }}
         />
       </View>
       {/* <View style={styles.inputContainer}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   FlatList,
@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import CartsContext from '../components/CartsContext';
 import TaskItem from '../components/TaskItem';
 // import { carts } from '../database/carts';
 // import { groups } from '../database/groups';
@@ -22,10 +23,10 @@ function filterCartsForPersonalTasks(carts) {
   return filteredCarts;
 }
 
-function HelloCreateFirst(currentTasks) {
-  console.log('currentTasks[0]: ', currentTasks[0]);
+function HelloCreateFirst(currentCarts) {
+  console.log('currentCarts: ', currentCarts);
 
-  if (!currentTasks[0]) {
+  if (!currentCarts) {
     return (
       <View style={styles.createFirstWrap}>
         <Image
@@ -38,30 +39,31 @@ function HelloCreateFirst(currentTasks) {
 }
 
 export default function TaskList({ route }) {
-  const [taskInput, setTaskInput] = useState('');
-  const [currentTasks, setCurrentTasks] = useState([]);
-  const [ratingInput, setRatingInput] = useState(5);
-  const [currentCartId, setCurrentCartId] = useState(1);
+  // const [taskInput, setTaskInput] = useState('');
+  // const [ratingInput, setRatingInput] = useState(5);
+  // const [currentCartId, setCurrentCartId] = useState(1);
 
-  const currentCarts = filterCartsForPersonalTasks(route.params.carts);
+  const [carts, setCarts] = useContext(CartsContext);
 
-  console.log('currentTasks: ', currentTasks);
+  const currentCarts = filterCartsForPersonalTasks(carts);
 
-  function taskInputHandler(input) {
-    setTaskInput(input);
-  }
+  console.log('carts in Tasks', carts);
 
-  function ratingCompleted(rating) {
-    console.log('Rating is: ' + rating);
-    setRatingInput(rating);
-  }
+  // function taskInputHandler(input) {
+  //   setTaskInput(input);
+  // }
 
-  function addTaskHandler() {
-    setTasks((currentTasks) => [
-      ...currentTasks,
-      { text: taskInput, rating: ratingInput, id: Math.random().toString() },
-    ]);
-  }
+  // function ratingCompleted(rating) {
+  //   console.log('Rating is: ' + rating);
+  //   setRatingInput(rating);
+  // }
+
+  // function addTaskHandler() {
+  //   setCurrentTasks((currentTasks) => [
+  //     ...currentTasks,
+  //     { text: taskInput, rating: ratingInput, id: Math.random().toString() },
+  //   ]);
+  // }
 
   return (
     <View style={styles.screen}>
@@ -106,23 +108,24 @@ export default function TaskList({ route }) {
         /> */}
       </View>
 
-      <HelloCreateFirst currentTasks={currentTasks} />
+      <HelloCreateFirst currentCarts={currentCarts} />
       <View style={styles.itemListContainer}>
         <FlatList
           data={currentCarts}
+          keyExtractor={(item) => item.cartId}
           renderItem={(cart) => {
             return (
               <TaskItem
                 text={cart.item.label}
-                id={cart.item.cartid}
+                id={cart.item.cartId}
                 rating={cart.item.rating}
                 typeId={cart.item.typeId}
               />
             );
           }}
-          keyExtractor={(item, index) => {
-            return item.cartid;
-          }}
+          // keyExtractor={(item, index) => {
+          //   return item.cartid;
+          // }}
         />
       </View>
       {/* <View style={styles.inputContainer}>

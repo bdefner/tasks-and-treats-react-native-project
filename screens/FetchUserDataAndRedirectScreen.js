@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import CartsContext from '../components/CartsContext';
 
 async function fetchUserCarts(userId) {
   const apiBaseUrl = 'http://localhost:3000/api/carts';
@@ -29,14 +30,15 @@ async function fetchUserCarts(userId) {
 export default function FetchUserDataAndRedirect({ route }) {
   const navigation = useNavigation();
   const userId = route.params.user.userId;
-  let carts = [];
+
+  const [carts, setCarts] = useContext(CartsContext);
 
   useEffect(async () => {
-    carts = await fetchUserCarts(userId);
+    setCarts(await fetchUserCarts(userId));
   }, []);
 
   setTimeout(() => {
-    navigation.navigate('TabBar', { carts: carts, user: route.params.user });
+    navigation.navigate('TabBar', { user: route.params.user });
   }, 3100);
 
   return (

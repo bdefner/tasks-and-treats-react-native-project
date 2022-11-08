@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import AuthWrap from '../components/AuthWrap';
+import CartsContext from '../components/CartsContext';
 import TabBar from '../components/TabBar';
 import { colors, font, spacing } from '../utils/styleConstants';
 
