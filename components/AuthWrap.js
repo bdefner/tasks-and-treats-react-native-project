@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import Lottie from 'lottie-react-native';
 import { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import { spacing } from '../utils/styleConstants';
 
 export default function AddConnection() {
   const [tryToLogIn, setTryToLogIn] = useState(true);
@@ -13,6 +15,10 @@ export default function AddConnection() {
       const apiBaseUrl = 'http://localhost:3000/api/auth';
       const token = await SecureStore.getItemAsync('sessionToken');
       console.log('token', token);
+
+      if (!token) {
+        setTryToLogIn(false);
+      }
 
       if (token) {
         // Get the user (username, userId, userEmail)
@@ -33,16 +39,16 @@ export default function AddConnection() {
 
           console.log('json.user', json.user);
 
-          if (!json.user) {
-            setTryToLogIn(false);
-          }
-
           if (json.user) {
             // Navigate to FetchUserDataAndRedirect sending userId
 
-            navigation.navigate('FetchUserDataAndRedirect', {
-              user: json.user,
-            });
+            // Note: The timeout is only for a smoother UX
+
+            setTimeout(() => {
+              navigation.navigate('FetchUserDataAndRedirect', {
+                user: json.user,
+              });
+            }, 1500);
           }
         } catch (error) {
           console.error(error);
@@ -56,10 +62,38 @@ export default function AddConnection() {
   return (
     <>
       {tryToLogIn ? (
-        <Text>Trying to log in by token</Text>
+        <></>
       ) : (
-        <Text>couldn't log in by token</Text>
+        <View style={styles.buttonWrap}>
+          <View style={styles.button}>
+            <Button
+              title="Login"
+              onPress={() => {
+                navigation.navigate('Login');
+              }}
+            />
+          </View>
+          <View style={styles.button}>
+            <Button
+              title="Signup"
+              onPress={() => {
+                navigation.navigate('Signup');
+              }}
+            />
+          </View>
+        </View>
       )}
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    padding: spacing.medium_1,
+    margin: spacing.small,
+  },
+  buttonWrap: {
+    padding: spacing.large_2,
+    flexDirection: 'row',
+  },
+});

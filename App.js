@@ -1,13 +1,13 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import TabBar from './components/TabBar';
 import FetchUserDataAndRedirectScreen from './screens/FetchUserDataAndRedirectScreen';
 import LoginScreen from './screens/LoginScreen';
+import SecureLogoutScreen from './screens/SecureLogoutScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +31,11 @@ function AuthStack() {
       <Stack.Screen
         name="FetchUserDataAndRedirect"
         component={FetchUserDataAndRedirectScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SecureLogoutScreen"
+        component={SecureLogoutScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -65,8 +70,6 @@ function Navigation() {
 }
 
 export default function App() {
-
-
   return (
     <>
       <StatusBar style="dark" />

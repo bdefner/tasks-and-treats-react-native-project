@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   Button,
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -21,13 +22,30 @@ function filterCartsForPersonalTasks(carts) {
   return filteredCarts;
 }
 
+function HelloCreateFirst(currentTasks) {
+  console.log('currentTasks[0]: ', currentTasks[0]);
+
+  if (!currentTasks[0]) {
+    return (
+      <View style={styles.createFirstWrap}>
+        <Image
+          source={require('../assets/grafics/create-first-task.png')}
+          style={{ width: 270, height: 345 }}
+        />
+      </View>
+    );
+  }
+}
+
 export default function TaskList({ route }) {
   const [taskInput, setTaskInput] = useState('');
-  const [CurrentTasks, setCurrentTasks] = useState([]);
+  const [currentTasks, setCurrentTasks] = useState([]);
   const [ratingInput, setRatingInput] = useState(5);
   const [currentCartId, setCurrentCartId] = useState(1);
 
   const currentCarts = filterCartsForPersonalTasks(route.params.carts);
+
+  console.log('currentTasks: ', currentTasks);
 
   function taskInputHandler(input) {
     setTaskInput(input);
@@ -88,6 +106,7 @@ export default function TaskList({ route }) {
         /> */}
       </View>
 
+      <HelloCreateFirst currentTasks={currentTasks} />
       <View style={styles.itemListContainer}>
         <FlatList
           data={currentCarts}
@@ -142,6 +161,12 @@ const styles = StyleSheet.create({
     padding: spacing.small,
     borderWidth: 1,
     borderRadius: spacing.small,
+  },
+  createFirstWrap: {
+    flex: 100,
+    padding: spacing.medium_1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   itemListContainer: {
     flex: 8,

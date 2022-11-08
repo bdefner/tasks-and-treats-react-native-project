@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AboutScreen from '../screens/AboutScreen';
 import AddFriend from '../screens/AddFriend';
 import CreateNew from '../screens/CreateNew';
 import Help from '../screens/Help';
@@ -11,6 +12,7 @@ import Treats from '../screens/Treats';
 import { colors, font, shadow, spacing } from '../utils/styleConstants';
 
 const CreateNewStack = createNativeStackNavigator();
+const SettingsStack = createNativeStackNavigator();
 
 function CreateNewStackScreen() {
   return (
@@ -18,6 +20,14 @@ function CreateNewStackScreen() {
       <CreateNewStack.Screen name="CreateNew" component={CreateNew} />
       <CreateNewStack.Screen name="AddFriend" component={AddFriend} />
     </CreateNewStack.Navigator>
+  );
+}
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Settings" component={Settings} />
+      <SettingsStack.Screen name="About" component={AboutScreen} />
+    </SettingsStack.Navigator>
   );
 }
 
@@ -39,7 +49,7 @@ export default function TabBar({ route }) {
     >
       <Tab.Screen
         name="Settings"
-        component={Settings}
+        component={SettingsStackScreen}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapWithIcon}>

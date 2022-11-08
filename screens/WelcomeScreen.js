@@ -1,14 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
-import TabBar from '../components/TabBar';
 import AuthWrap from '../components/AuthWrap';
+import TabBar from '../components/TabBar';
 import { colors, font, spacing } from '../utils/styleConstants';
 
-
 export default function Welcome() {
-
-
   const navigation = useNavigation();
 
   return (
@@ -20,9 +17,9 @@ export default function Welcome() {
         style={styles.welcomeImg}
       />
       <Text>A productivity app that's fun to use</Text>
-      <View style={styles.buttonWrap}>
+      <View>
         <AuthWrap />
-        <View style={styles.button}>
+        {/* <View style={styles.button}>
           <Button
             title="Login"
             onPress={() => {
@@ -37,7 +34,7 @@ export default function Welcome() {
               navigation.navigate('Signup');
             }}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -71,13 +68,5 @@ const styles = StyleSheet.create({
     position: 'relative',
     right: -60,
     bottom: 30,
-  },
-  buttonWrap: {
-    padding: spacing.large_2,
-    flexDirection: 'row',
-  },
-  button: {
-    padding: spacing.medium_1,
-    margin: spacing.small,
   },
 });

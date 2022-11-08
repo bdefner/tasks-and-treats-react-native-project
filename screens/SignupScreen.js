@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   View,
 } from 'react-native';
 import { buttonStyles, colors, font, spacing } from '../utils/styleConstants';
-import * as SecureStore from 'expo-secure-store';
 
 async function signupHandler(username, email, passwordHash) {
   const apiBaseUrl = 'http://localhost:3000/api/signup';
@@ -31,37 +31,30 @@ async function signupHandler(username, email, passwordHash) {
     });
     const json = await response.json();
 
-
     // check if there is already a token stored and replace it
 
-    const tokenTest = await SecureStore.getItemAsync('sessionToken');
-
-    console.log('Token before check: ', tokenTest);
-
-    if (tokenTest) {
-      SecureStore.deleteItemAsync("sessionToken")
-      .catch(error => console.log("Could not delete sessionToken ", error));
+    if (SecureStore.getItemAsync('sessionToken')) {
+      SecureStore.deleteItemAsync('sessionToken').catch((error) =>
+        console.log('Could not delete sessionToken ', error),
+      );
     }
 
     await SecureStore.setItemAsync('sessionToken', json.user.sessionToken);
 
     return json.user;
-
   } catch (error) {
     console.error(error);
   }
 }
 
-
 export default function Signup() {
   const [username, setUsername] = useState('');
-  const [usernameError, setUsernameError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordTest, setPasswordTest] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [infoTextVisible, setInfoTextVisible] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [infoTextVisible, setInfoTextVisible] = useState(false);
 
   const navigation = useNavigation();
   return (
@@ -72,6 +65,7 @@ export default function Signup() {
           source={require('../assets/grafics/signup.png')}
           style={styles.welcomeImg}
         />
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
         <View style={styles.inputFieldWrap}>
           <TextInput
             style={styles.inputField}
@@ -79,7 +73,6 @@ export default function Signup() {
             onChangeText={setUsername}
           />
         </View>
-        <Text>{usernameError}</Text>
         <View style={styles.inputFieldWrap}>
           <TextInput
             style={styles.inputField}
@@ -95,7 +88,7 @@ export default function Signup() {
             textContentType="newPassword"
           />
         </View>
-        <Text style={styles.errorMessage}>{passwordError}</Text>
+
         <View style={styles.inputFieldWrap}>
           <TextInput
             style={styles.inputField}
@@ -111,11 +104,18 @@ export default function Signup() {
           style={buttonStyles.purplePrimary}
           onPress={async () => {
             if (password !== passwordTest) {
-              setPasswordError("Repeated password doesn't match!");
+              setErrorMessage("Repeated password doesn't match!");
             } else {
-             const userData = await signupHandler(username, email, password);
-             console.log('userData:', userData )
-
+              const userData = await signupHandler(username, email, password);
+              if (!userData) {
+                setErrorMessage(
+                  'Something went wrong. Please check your internet connection and try again.',
+                );
+              } else {
+                navigation.replace('FetchUserDataAndRedirect', {
+                  user: userData,
+                });
+              }
             }
           }}
         >

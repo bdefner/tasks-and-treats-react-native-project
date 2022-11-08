@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import {
   Button,
@@ -29,6 +30,15 @@ async function handleLogin(username, password) {
     });
     const json = await response.json();
     console.log('json.user?.username', json.user);
+
+    if (await SecureStore.getItemAsync('sessionToken')) {
+      SecureStore.deleteItemAsync('sessionToken').catch((error) =>
+        console.log('Could not delete sessionToken ', error),
+      );
+    }
+    console.log('json.user.sessionToken: ', json.user.sessionToken);
+
+    await SecureStore.setItemAsync('sessionToken', json.user.sessionToken);
 
     if (!json.user?.username === 'undefined') {
       return false;
