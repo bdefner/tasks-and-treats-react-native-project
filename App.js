@@ -2,13 +2,13 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import CartsContext from './components/CartsContext';
 import TabBar from './components/TabBar';
 import FetchUserDataAndRedirectScreen from './screens/FetchUserDataAndRedirectScreen';
 import LoginScreen from './screens/LoginScreen';
 import SecureLogoutScreen from './screens/SecureLogoutScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import CartsContext from './utils/CartsContext';
 
 const Stack = createNativeStackNavigator();
 

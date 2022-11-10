@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import AuthWrap from '../components/AuthWrap';
-import CartsContext from '../components/CartsContext';
 import TabBar from '../components/TabBar';
+import CartsContext from '../utils/CartsContext';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Welcome() {
@@ -20,22 +20,6 @@ export default function Welcome() {
       <Text>A productivity app that's fun to use</Text>
       <View>
         <AuthWrap />
-        {/* <View style={styles.button}>
-          <Button
-            title="Login"
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-          />
-        </View>
-        <View style={styles.button}>
-          <Button
-            title="Signup"
-            onPress={() => {
-              navigation.navigate('Signup');
-            }}
-          />
-        </View> */}
       </View>
     </View>
   );

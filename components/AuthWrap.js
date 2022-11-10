@@ -39,6 +39,8 @@ export default function AddConnection() {
 
           console.log('json.user', json.user);
 
+          // Major TODO!! If json.user = undefined, then the token is not valid and needs to be deleted! Afterwards tryToLogIn is to be set to false
+
           if (json.user) {
             // Navigate to FetchUserDataAndRedirect sending userId
 

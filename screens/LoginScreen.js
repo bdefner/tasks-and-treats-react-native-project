@@ -4,7 +4,10 @@ import { useState } from 'react';
 import {
   Button,
   Image,
+  KeyboardAvoidingView,
   Pressable,
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -60,50 +63,56 @@ export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    <View style={styles.screen}>
-      <View>
-        <Text style={styles.heading}>You look familiar. Do I know you??</Text>
-        <Image
-          source={require('../assets/grafics/login.png')}
-          style={styles.welcomeImg}
-        />
-        <View style={styles.inputFieldWrap}>
-          <TextInput
-            style={styles.inputField}
-            placeholder="username"
-            onChangeText={setUsername}
+    <ScrollView>
+      <View style={styles.screen}>
+        <View>
+          <Text style={styles.heading}>You look familiar. Do I know you??</Text>
+          <Image
+            source={require('../assets/grafics/login.png')}
+            style={styles.welcomeImg}
           />
+          <View style={styles.inputFieldWrap}>
+            <TextInput
+              style={styles.inputField}
+              placeholder="username"
+              onChangeText={setUsername}
+            />
+          </View>
+          <View style={styles.inputFieldWrap}>
+            <TextInput
+              style={styles.inputField}
+              placeholder="password"
+              onChangeText={setPassword}
+            />
+          </View>
         </View>
-        <View style={styles.inputFieldWrap}>
-          <TextInput
-            style={styles.inputField}
-            placeholder="password"
-            onChangeText={setPassword}
-          />
-        </View>
-      </View>
-      <Text>{errorMessage}</Text>
-      <View>
-        <Pressable
-          style={buttonStyles.greenPrimary}
-          onPress={async () => {
-            const loginResponse = await handleLogin(username, password);
-
-            console.log('loginResponse', loginResponse);
-
-            if (!loginResponse) {
-              setErrorMessage('Username or password is incorrect.');
-            } else {
-              navigation.replace('FetchUserDataAndRedirect', {
-                user: loginResponse,
-              });
-            }
-          }}
+        <Text>{errorMessage}</Text>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <Text style={{ color: 'white' }}>Login</Text>
-        </Pressable>
+          <View>
+            <Pressable
+              style={buttonStyles.greenPrimary}
+              onPress={async () => {
+                const loginResponse = await handleLogin(username, password);
+
+                console.log('loginResponse', loginResponse);
+
+                if (!loginResponse) {
+                  setErrorMessage('Username or password is incorrect.');
+                } else {
+                  navigation.replace('FetchUserDataAndRedirect', {
+                    user: loginResponse,
+                  });
+                }
+              }}
+            >
+              <Text style={{ color: 'white' }}>Login</Text>
+            </Pressable>
+          </View>
+        </KeyboardAvoidingView>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import CartsContext from '../components/CartsContext';
 import TaskItem from '../components/TaskItem';
+import CartsContext from '../utils/CartsContext';
 // import { carts } from '../database/carts';
 // import { groups } from '../database/groups';
 import { colors, font, spacing } from '../utils/styleConstants';
@@ -92,7 +92,9 @@ export default function TaskList({ route }) {
       <View style={styles.itemListContainer}>
         <FlatList
           data={currentCarts}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.cartId}
+          inverted={true}
+          contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
           renderItem={(cart) => {
             return (
               <TaskItem
@@ -103,33 +105,8 @@ export default function TaskList({ route }) {
               />
             );
           }}
-          // keyExtractor={(item, index) => {
-          //   return item.cartid;
-          // }}
         />
       </View>
-      {/* <View style={styles.inputContainer}>
-        <View style={styles.rowOfInputs}>
-          <View>
-            <View style={styles.tasksInput}>
-              <TextInput
-                placeholder="add a task"
-                onChangeText={taskInputHandler}
-              />
-            </View>
-            <View style={styles.ratingContainer}>
-              <Rating
-                type="star"
-                ratingCount={10}
-                imageSize={30}
-                showRating
-                onFinishRating={ratingCompleted}
-              />
-            </View>
-          </View>
-          <Button title="Add Task" onPress={addTaskHandler} />
-        </View>
-      </View> */}
     </View>
   );
 }
@@ -146,11 +123,10 @@ const styles = StyleSheet.create({
     borderRadius: spacing.small,
   },
   itemListContainer: {
-    flex: 8,
+    flex: 1,
     padding: spacing.medium_1,
     borderWidth: 0,
   },
-
   inputContainer: {
     padding: spacing.medium_1,
     flex: 4,

@@ -1,11 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import CartsContext from '../components/CartsContext';
+import CartsContext from '../utils/CartsContext';
+import Global from '../utils/globals';
+import UserContext from '../utils/UserContext';
+
+async function StoreSessionTokenInGlobal() {
+  Global.sessionToken = await SecureStore.getItemAsync('sessionToken');
+}
 
 async function fetchUserCarts(userId) {
-  const apiBaseUrl = 'http://localhost:3000/api/carts';
+  const apiBaseUrl = 'http://localhost:3000/api/getcarts';
 
   try {
     const response = await fetch(apiBaseUrl, {
@@ -32,6 +39,14 @@ export default function FetchUserDataAndRedirect({ route }) {
   const userId = route.params.user.userId;
 
   const [carts, setCarts] = useContext(CartsContext);
+
+  // Storing user information in ../utils/global.js
+
+  Global.username = route.params.user.username;
+  Global.userId = route.params.user.userId;
+  StoreSessionTokenInGlobal();
+
+  console.log('Global.sessionToken: ', Global.sessionToken);
 
   useEffect(async () => {
     setCarts(await fetchUserCarts(userId));

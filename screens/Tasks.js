@@ -1,32 +1,40 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
   Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import CartsContext from '../components/CartsContext';
 import TaskItem from '../components/TaskItem';
+import CartsContext from '../utils/CartsContext';
 // import { carts } from '../database/carts';
 // import { groups } from '../database/groups';
 import { colors, font, spacing } from '../utils/styleConstants';
 
-function filterCartsForPersonalTasks(carts) {
+function filterCartsForPersonalActiveTasks(carts) {
   const filteredCarts = carts.filter((item) => {
-    return item.typeId === 1 && !item.groupId;
+    return item.typeId === 1 && item.statusId === 1 && !item.groupId;
   });
   return filteredCarts;
 }
 
-function HelloCreateFirst(currentCarts) {
-  console.log('currentCarts: ', currentCarts);
+function filterCartsForPersonalInactiveTasks(carts) {
+  const filteredCarts = carts.filter((item) => {
+    return item.typeId === 1 && item.statusId === 2 && !item.groupId;
+  });
+  const reversedFilteredCarts = filteredCarts.reverse();
 
-  if (!currentCarts) {
+  return filteredCarts;
+}
+
+function HelloCreateFirst(props) {
+  if (props.isScreenEmpty) {
     return (
       <View style={styles.createFirstWrap}>
         <Image
@@ -38,6 +46,14 @@ function HelloCreateFirst(currentCarts) {
   }
 }
 
+function isScreenEmpty(currentActiveCarts, currentInactiveCarts) {
+  if (!currentActiveCarts[0] && !currentInactiveCarts[0]) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export default function TaskList({ route }) {
   // const [taskInput, setTaskInput] = useState('');
   // const [ratingInput, setRatingInput] = useState(5);
@@ -45,9 +61,23 @@ export default function TaskList({ route }) {
 
   const [carts, setCarts] = useContext(CartsContext);
 
-  const currentCarts = filterCartsForPersonalTasks(carts);
+  const [currentActiveCarts, setCurrentActiveCarts] = useState(
+    filterCartsForPersonalActiveTasks(carts),
+  );
+  const [currentInactiveCarts, setCurrentInactiveCarts] = useState(
+    filterCartsForPersonalInactiveTasks(carts),
+  );
 
-  console.log('carts in Tasks', carts);
+  useEffect(() => {
+    setCurrentActiveCarts(filterCartsForPersonalActiveTasks(carts));
+    setCurrentInactiveCarts(filterCartsForPersonalInactiveTasks(carts));
+    if (!currentActiveCarts[0] && !currentInactiveCarts[0]) {
+    }
+  }, [carts]);
+
+  // const currentActiveCarts = filterCartsForPersonalActiveTasks(carts);
+
+  // const currentInactiveCarts = filterCartsForPersonalInactiveTasks(carts);
 
   // function taskInputHandler(input) {
   //   setTaskInput(input);
@@ -108,48 +138,38 @@ export default function TaskList({ route }) {
         /> */}
       </View>
 
-      <HelloCreateFirst currentCarts={currentCarts} />
-      <View style={styles.itemListContainer}>
-        <FlatList
-          data={currentCarts}
-          keyExtractor={(item) => item.cartId}
-          renderItem={(cart) => {
+      <HelloCreateFirst
+        isScreenEmpty={isScreenEmpty(currentActiveCarts, currentInactiveCarts)}
+      />
+      {/*
+      FlatList is not used, since there are two list to be rendered in one scrollview. Performance should be good, even with long lists
+      */}
+      <ScrollView>
+        <View style={styles.itemListContainer}>
+          {currentActiveCarts.map((cart) => {
             return (
               <TaskItem
-                text={cart.item.label}
-                id={cart.item.cartId}
-                rating={cart.item.rating}
-                typeId={cart.item.typeId}
+                text={cart.label}
+                typeId={cart.typeId}
+                statusId={cart.statusId}
+                cartId={cart.cartId}
+                rating={cart.rating}
               />
             );
-          }}
-          // keyExtractor={(item, index) => {
-          //   return item.cartid;
-          // }}
-        />
-      </View>
-      {/* <View style={styles.inputContainer}>
-        <View style={styles.rowOfInputs}>
-          <View>
-            <View style={styles.tasksInput}>
-              <TextInput
-                placeholder="add a task"
-                onChangeText={taskInputHandler}
+          })}
+          {currentInactiveCarts.map((cart) => {
+            return (
+              <TaskItem
+                text={cart.label}
+                typeId={cart.typeId}
+                statusId={cart.statusId}
+                cartId={cart.cartId}
+                rating={cart.rating}
               />
-            </View>
-            <View style={styles.ratingContainer}>
-              <Rating
-                type="star"
-                ratingCount={10}
-                imageSize={30}
-                showRating
-                onFinishRating={ratingCompleted}
-              />
-            </View>
-          </View>
-          <Button title="Add Task" onPress={addTaskHandler} />
+            );
+          })}
         </View>
-      </View> */}
+      </ScrollView>
     </View>
   );
 }
@@ -172,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   itemListContainer: {
-    flex: 8,
+    flex: 100,
     padding: spacing.medium_1,
     borderWidth: 0,
   },

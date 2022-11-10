@@ -34,10 +34,9 @@ function SettingsStackScreen() {
 export default function TabBar({ route }) {
   const Tab = createBottomTabNavigator();
 
-  // parsedCart = JSON.parse(carts);
-  console.log('carts in TabBar', route.params.carts);
   const [carts, setCarts] = useState(route.params.carts);
 
+  console.log('route.params.user in TabBar', route.params.user);
   return (
     <Tab.Navigator
       initialRouteName="Tasks"
@@ -99,6 +98,7 @@ export default function TabBar({ route }) {
       <Tab.Screen
         name="New"
         component={CreateNewStackScreen}
+        initialParams={{ user: route.params.user }}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapCreateNew}>
