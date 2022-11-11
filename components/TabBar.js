@@ -36,7 +36,6 @@ export default function TabBar({ route }) {
 
   const [carts, setCarts] = useState(route.params.carts);
 
-  console.log('route.params.user in TabBar', route.params.user);
   return (
     <Tab.Navigator
       initialRouteName="Tasks"
@@ -47,7 +46,7 @@ export default function TabBar({ route }) {
       }}
     >
       <Tab.Screen
-        name="Settings"
+        name="SettingsStack"
         component={SettingsStackScreen}
         options={{
           tabBarIcon: (focused) => (
@@ -60,7 +59,7 @@ export default function TabBar({ route }) {
               <Text
                 style={{
                   color: focused ? colors.black : 'blue',
-                  fontSize: 11,
+                  fontSize: 10,
                 }}
               >
                 Settings
@@ -78,7 +77,7 @@ export default function TabBar({ route }) {
           tabBarIcon: () => (
             <View
               style={{
-                padding: spacing.small,
+                padding: 4,
                 borderRadius: spacing.small,
                 backgroundColor: colors.green_1,
               }}
@@ -106,10 +105,10 @@ export default function TabBar({ route }) {
                 source={require('../assets/icons/createNew.png')}
                 resizeMode="contain"
                 style={{
-                  width: 50,
-                  height: 50,
+                  width: 40,
+                  height: 40,
                   tintColor: focused ? colors.black : 'blue',
-                  margin: 5,
+                  margin: 3,
                 }}
               />
             </View>
@@ -124,7 +123,7 @@ export default function TabBar({ route }) {
           tabBarIcon: () => (
             <View
               style={{
-                padding: spacing.small,
+                padding: 4,
                 borderRadius: spacing.small,
                 backgroundColor: colors.purple_1,
               }}
@@ -145,17 +144,12 @@ export default function TabBar({ route }) {
               <Image
                 source={require('../assets/icons/help.png')}
                 resizeMode="contain"
-                style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: focused ? colors.black : 'blue',
-                  margin: 5,
-                }}
+                style={styles.navIconStyle}
               />
               <Text
                 style={{
                   color: focused ? colors.black : 'blue',
-                  fontSize: 11,
+                  fontSize: 10,
                 }}
               >
                 Help
@@ -185,21 +179,20 @@ const styles = StyleSheet.create({
   },
   tabBarWrapCreateNew: {
     position: 'relative',
-    top: -15,
+    top: -5,
   },
   tabBarStyle: {
     alignItems: 'baseline',
     position: 'absolute',
-    bottom: spacing.small,
-    borderRadius: spacing.medium_1,
-    margin: spacing.medium_1,
-    padding: spacing.small,
+    padding: 3,
+    paddingBottom: spacing.medium_1,
     ...shadow,
   },
   navIconStyle: {
-    width: 25,
-    height: 25,
+    padding: 5,
+    width: spacing.medium_1,
+    height: spacing.medium_1,
     tintColor: colors.black,
-    margin: 5,
+    margin: 3,
   },
 });

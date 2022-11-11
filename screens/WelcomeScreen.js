@@ -17,7 +17,8 @@ export default function Welcome() {
         source={require('../assets/grafics/welcome.png')}
         style={styles.welcomeImg}
       />
-      <Text>A productivity app that's fun to use</Text>
+      <Text>An anti-procrastination app</Text>
+      <Text>that's fun to use</Text>
       <View>
         <AuthWrap />
       </View>

@@ -1,3 +1,4 @@
+import Lottie from 'lottie-react-native';
 import { useContext, useEffect, useState } from 'react';
 import {
   Button,
@@ -11,6 +12,8 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import ConditionalRuler from '../components/ConditionalRuler';
+import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import TaskItem from '../components/TaskItem';
 import CartsContext from '../utils/CartsContext';
 // import { carts } from '../database/carts';
@@ -33,13 +36,13 @@ function filterCartsForPersonalInactiveTasks(carts) {
   return filteredCarts;
 }
 
-function HelloCreateFirst(props) {
+function FillEmptyScreen(props) {
   if (props.isScreenEmpty) {
     return (
       <View style={styles.createFirstWrap}>
         <Image
           source={require('../assets/grafics/create-first-task.png')}
-          style={{ width: 270, height: 345 }}
+          style={{ width: 178, height: 345 }}
         />
       </View>
     );
@@ -98,7 +101,17 @@ export default function TaskList({ route }) {
   return (
     <View style={styles.screen}>
       <View style={styles.headerWrap}>
+        <View
+          style={{
+            position: 'absolute',
+            left: spacing.medium_1,
+            bottom: spacing.medium_1,
+          }}
+        >
+          <StarBudgetDisplay />
+        </View>
         <Text style={styles.headerText}>Tasks</Text>
+        <View></View>
       </View>
       {/* On top horizontal scroll navigation */}
 
@@ -138,7 +151,7 @@ export default function TaskList({ route }) {
         /> */}
       </View>
 
-      <HelloCreateFirst
+      <FillEmptyScreen
         isScreenEmpty={isScreenEmpty(currentActiveCarts, currentInactiveCarts)}
       />
       {/*
@@ -157,6 +170,12 @@ export default function TaskList({ route }) {
               />
             );
           })}
+          {
+            <ConditionalRuler
+              label="😎 see what you've done 👇"
+              condition={currentInactiveCarts[0]}
+            />
+          }
           {currentInactiveCarts.map((cart) => {
             return (
               <TaskItem
@@ -220,7 +239,7 @@ const styles = StyleSheet.create({
   },
   headerWrap: {
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     padding: spacing.medium_1,
     backgroundColor: colors.green_1,
     borderBottomColor: colors.greyBorder,

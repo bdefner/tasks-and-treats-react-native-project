@@ -100,24 +100,74 @@ export default function TaskList(props) {
       <View>
         <Text style={styles.taskItemText}>{currentLabel}</Text>
       </View>
-      <View>
-        <View style={styles.ratingWrap}>
-          <Rating
-            type="star"
-            ratingCount={currentRating}
-            imageSize={17}
-            tintColor={tintColor}
-            // onFinishRating={ratingCompleted}
-          />
+      {params.statusId == 1 && (
+        <View>
+          <View style={styles.ratingWrap}>
+            <Rating
+              type="star"
+              ratingCount={currentRating}
+              imageSize={17}
+              tintColor={tintColor}
+              // onFinishRating={ratingCompleted}
+            />
+          </View>
+
+          <View style={styles.iconMenuWrap}>
+            <View style={{ flexDirection: 'row' }}>
+              <Pressable>
+                <Image
+                  source={require('../assets/icons/edit.png')}
+                  style={{ ...styles.icons, marginRight: spacing.medium_1 }}
+                />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  deleteCartHandler(params);
+                  // delete cart locally in state
+
+                  const newCarts = carts.filter(function (cart) {
+                    return cart.cartId !== props.cartId;
+                  });
+                  setCarts(newCarts);
+                }}
+              >
+                <Image
+                  source={require('../assets/icons/delete.png')}
+                  style={{ ...styles.icons }}
+                />
+              </Pressable>
+            </View>
+            <View>
+              <Pressable
+                onPress={async () => {
+                  // Update statusId in params
+                  params.statusId = 2;
+                  // Update cart in database
+                  const response = await updateCartHandler(params);
+                  console.log('response ', response);
+                  // Update cart in local state
+                  const newCarts = carts.map((cart) => {
+                    if (cart.cartId === params.cartId) {
+                      return { ...cart, statusId: 2 };
+                    }
+                    return cart;
+                  });
+                  console.log('newCarts: ', newCarts);
+                  setCarts(newCarts);
+                }}
+              >
+                <Image
+                  source={require('../assets/icons/done.png')}
+                  style={{ ...styles.icons }}
+                />
+              </Pressable>
+            </View>
+          </View>
         </View>
-        <View style={styles.iconMenuWrap}>
+      )}
+      {params.statusId == 2 && (
+        <View style={{ ...styles.iconMenuWrap, marginTop: spacing.medium_1 }}>
           <View style={{ flexDirection: 'row' }}>
-            <Pressable>
-              <Image
-                source={require('../assets/icons/edit.png')}
-                style={{ ...styles.icons, marginRight: spacing.medium_1 }}
-              />
-            </Pressable>
             <Pressable
               onPress={() => {
                 deleteCartHandler(params);
@@ -134,19 +184,30 @@ export default function TaskList(props) {
                 style={{ ...styles.icons }}
               />
             </Pressable>
+            <View
+              style={{ flexDirection: 'row', marginLeft: spacing.medium_1 }}
+            >
+              <Image
+                source={require('../assets/icons/star.png')}
+                style={styles.star}
+              />
+              <Text style={{ color: 'white', marginLeft: spacing.small }}>
+                {currentRating}
+              </Text>
+            </View>
           </View>
           <View>
             <Pressable
               onPress={async () => {
                 // Update statusId in params
-                params.statusId = 2;
+                params.statusId = 1;
                 // Update cart in database
                 const response = await updateCartHandler(params);
                 console.log('response ', response);
                 // Update cart in local state
                 const newCarts = carts.map((cart) => {
                   if (cart.cartId === params.cartId) {
-                    return { ...cart, statusId: 2 };
+                    return { ...cart, statusId: 1 };
                   }
                   return cart;
                 });
@@ -155,13 +216,13 @@ export default function TaskList(props) {
               }}
             >
               <Image
-                source={require('../assets/icons/done.png')}
+                source={require('../assets/icons/putBack.png')}
                 style={{ ...styles.icons }}
               />
             </Pressable>
           </View>
         </View>
-      </View>
+      )}
     </View>
   );
 }
@@ -189,5 +250,10 @@ const styles = StyleSheet.create({
     height: spacing.medium_1,
     width: spacing.medium_1,
     tintColor: colors.lightGrey,
+  },
+  star: {
+    width: spacing.medium_1,
+    height: spacing.medium_1,
+    tintColor: colors.yellowStar,
   },
 });

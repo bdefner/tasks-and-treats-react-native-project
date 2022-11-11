@@ -105,49 +105,50 @@ export default function CreateNew({ route }) {
 
   return (
     <View style={styles.screen}>
-      <Text>Let's add a ...</Text>
-      <View style={styles.toggleWrap}>
-        <Pressable
-          onPress={() => setType(true)}
-          style={
-            type
-              ? {
-                  ...styles.toggle,
-                  borderColor: colors.green_1,
-                  backgroundColor: colors.green_1,
-                }
-              : { ...styles.toggle, borderColor: colors.green_1 }
-          }
-        >
-          <Text style={type ? { color: 'white' } : { color: colors.green_1 }}>
-            Task
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setType(false)}
-          style={
-            type
-              ? {
-                  ...styles.toggle,
-                  borderColor: colors.purple_1,
-                }
-              : {
-                  ...styles.toggle,
-                  borderColor: colors.purple_1,
-                  backgroundColor: colors.purple_1,
-                }
-          }
-        >
-          <Text style={type ? { color: colors.purple_1 } : { color: 'white' }}>
-            Treat
-          </Text>
-        </Pressable>
-      </View>
-      <Text>for ...</Text>
-      <Text>(myself) - (Franzi) - [add connection]</Text>
-      <View style={styles.inputWrap}>
+      <View style={styles.innerWrap}>
+        <Text style={{ textAlign: 'center' }}>What would you like to add?</Text>
+        <View style={styles.toggleWrap}>
+          <Pressable
+            onPress={() => setType(true)}
+            style={
+              type
+                ? {
+                    ...styles.toggle,
+                    borderColor: colors.green_1,
+                    backgroundColor: colors.green_1,
+                  }
+                : { ...styles.toggle, borderColor: colors.green_1 }
+            }
+          >
+            <Text style={type ? { color: 'white' } : { color: colors.green_1 }}>
+              Task
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => setType(false)}
+            style={
+              type
+                ? {
+                    ...styles.toggle,
+                    borderColor: colors.purple_1,
+                  }
+                : {
+                    ...styles.toggle,
+                    borderColor: colors.purple_1,
+                    backgroundColor: colors.purple_1,
+                  }
+            }
+          >
+            <Text
+              style={type ? { color: colors.purple_1 } : { color: 'white' }}
+            >
+              Treat
+            </Text>
+          </Pressable>
+        </View>
         <SafeAreaView>
           <TextInput
+            style={styles.textInput}
             placeholder={
               type ? 'Describe your task...' : 'Describe your treat...'
             }
@@ -205,6 +206,7 @@ const styles = StyleSheet.create({
   toggleWrap: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   toggle: {
     margin: spacing.medium_2,
@@ -214,7 +216,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: spacing.small,
   },
-  inputWrap: {
+  textInput: {
+    marginTop: spacing.medium_2,
+    marginBottom: spacing.medium_2,
+    textAlign: 'center',
+  },
+  innerWrap: {
     marginTop: spacing.large_1,
     padding: spacing.medium_1,
     backgroundColor: 'white',
