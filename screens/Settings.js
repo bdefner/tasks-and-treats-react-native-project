@@ -18,8 +18,32 @@ export default function Settings() {
           <Pressable style={styles.menuItemWrap} onPress={() => {}}>
             <View>
               <Image
-                source={require('../assets/icons/alert.png')}
+                source={require('../assets/icons/profile.png')}
                 style={{ ...styles.icons, tintColor: colors.green_1 }}
+              />
+            </View>
+            <View>
+              <Text style={{ fontSize: font.size_2 }}>Profile</Text>
+            </View>
+          </Pressable>
+        </View>
+        <View style={styles.menuCategoryWrap}>
+          <Pressable style={styles.menuItemWrap} onPress={() => {}}>
+            <View>
+              <Image
+                source={require('../assets/icons/appearance.png')}
+                style={{ ...styles.icons, tintColor: colors.black }}
+              />
+            </View>
+            <View>
+              <Text style={{ fontSize: font.size_2 }}>Appearance</Text>
+            </View>
+          </Pressable>
+          <Pressable style={styles.menuItemWrap} onPress={() => {}}>
+            <View>
+              <Image
+                source={require('../assets/icons/alert.png')}
+                style={{ ...styles.icons, tintColor: colors.black }}
               />
             </View>
             <View>

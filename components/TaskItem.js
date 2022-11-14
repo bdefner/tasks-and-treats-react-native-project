@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import { Button, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import budgetContext from '../utils/BudgetContext';
 import cartsContext from '../utils/CartsContext';
 import Global from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
@@ -67,13 +68,17 @@ async function deleteCartHandler(params) {
 }
 
 export default function TaskList(props) {
-  console.log('props.typeId: ', props.typeId);
   const [carts, setCarts] = useContext(cartsContext);
   const [currentLabel, setCurrentLabe] = useState(props.text);
   const [currentRating, setCurrentRating] = useState(props.rating);
   const [currentStatusId, setCurrentStatusId] = useState(props.statusId);
+  const [budget, setBudget] = useContext(budgetContext);
 
-  console.log('props: ', props);
+  async function updateBudget(rating) {
+    // Update the budget in local storage
+    // Update the budget on the database
+  }
+
   // Creating parameters for fetching
 
   const params = {
@@ -140,6 +145,11 @@ export default function TaskList(props) {
             <View>
               <Pressable
                 onPress={async () => {
+                  // Add stars to budget
+                  setBudget(budget + params.rating);
+                  console.log('Budet after Click: ', budget);
+
+                  updateBudget(params.rating);
                   // Update statusId in params
                   params.statusId = 2;
                   // Update cart in database
@@ -152,7 +162,6 @@ export default function TaskList(props) {
                     }
                     return cart;
                   });
-                  console.log('newCarts: ', newCarts);
                   setCarts(newCarts);
                 }}
               >

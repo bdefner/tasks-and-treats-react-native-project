@@ -8,46 +8,53 @@ import LoginScreen from './screens/LoginScreen';
 import SecureLogoutScreen from './screens/SecureLogoutScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
+import BudgetContext from './utils/BudgetContext';
 import CartsContext from './utils/CartsContext';
+import UserContext from './utils/UserContext';
 
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cartsX, setCartsX] = useState([]);
+  const [budget, setBudget] = useState(0);
 
   return (
-    <CartsContext.Provider value={[cartsX, setCartsX]}>
-      <Stack.Navigator
-        initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}
-        // screenOptions={{
-        //   headerShown: false,
-        // }}
-      >
-        <Stack.Screen
-          name="WelcomeScreen"
-          component={WelcomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen
-          name="FetchUserDataAndRedirect"
-          component={FetchUserDataAndRedirectScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SecureLogoutScreen"
-          component={SecureLogoutScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TabBar"
-          component={TabBar}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </CartsContext.Provider>
+    <UserContext.Provider>
+      <BudgetContext.Provider value={[budget, setBudget]}>
+        <CartsContext.Provider value={[cartsX, setCartsX]}>
+          <Stack.Navigator
+            initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}
+            // screenOptions={{
+            //   headerShown: false,
+            // }}
+          >
+            <Stack.Screen
+              name="WelcomeScreen"
+              component={WelcomeScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen
+              name="FetchUserDataAndRedirect"
+              component={FetchUserDataAndRedirectScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SecureLogoutScreen"
+              component={SecureLogoutScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TabBar"
+              component={TabBar}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </CartsContext.Provider>
+      </BudgetContext.Provider>
+    </UserContext.Provider>
   );
 }
 

@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import budgetContext from '../utils/BudgetContext';
 import CartsContext from '../utils/CartsContext';
 import Global from '../utils/globals';
 import UserContext from '../utils/UserContext';
@@ -39,17 +40,22 @@ export default function FetchUserDataAndRedirect({ route }) {
   const userId = route.params.user.userId;
 
   const [carts, setCarts] = useContext(CartsContext);
+  const [budget, setBudget] = useContext(budgetContext);
 
   // Storing user information in ../utils/global.js
 
+  console.log('route.params.user:', route.params.user);
   Global.username = route.params.user.username;
   Global.userId = route.params.user.userId;
-  StoreSessionTokenInGlobal();
+  // Global.budget = route.params.user.budget;
 
-  console.log('Global.sessionToken: ', Global.sessionToken);
+  console.log('Budget after FetchData... ', budget);
+
+  StoreSessionTokenInGlobal();
 
   useEffect(async () => {
     setCarts(await fetchUserCarts(userId));
+    setBudget(route.params.user.budget);
   }, []);
 
   setTimeout(() => {

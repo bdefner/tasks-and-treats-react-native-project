@@ -16,8 +16,6 @@ import ConditionalRuler from '../components/ConditionalRuler';
 import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import TaskItem from '../components/TaskItem';
 import CartsContext from '../utils/CartsContext';
-// import { carts } from '../database/carts';
-// import { groups } from '../database/groups';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 function filterCartsForPersonalActiveTasks(carts) {
@@ -42,7 +40,7 @@ function FillEmptyScreen(props) {
       <View style={styles.createFirstWrap}>
         <Image
           source={require('../assets/grafics/create-first-task.png')}
-          style={{ width: 178, height: 345 }}
+          style={{ width: 248, height: 415 }}
         />
       </View>
     );
@@ -63,6 +61,8 @@ export default function TaskList({ route }) {
   // const [currentCartId, setCurrentCartId] = useState(1);
 
   const [carts, setCarts] = useContext(CartsContext);
+  // const [currentBudget, setCurrentBudget] = useContext(budgetContext);
+  // setCurrentBudget(10);
 
   const [currentActiveCarts, setCurrentActiveCarts] = useState(
     filterCartsForPersonalActiveTasks(carts),
@@ -77,26 +77,6 @@ export default function TaskList({ route }) {
     if (!currentActiveCarts[0] && !currentInactiveCarts[0]) {
     }
   }, [carts]);
-
-  // const currentActiveCarts = filterCartsForPersonalActiveTasks(carts);
-
-  // const currentInactiveCarts = filterCartsForPersonalInactiveTasks(carts);
-
-  // function taskInputHandler(input) {
-  //   setTaskInput(input);
-  // }
-
-  // function ratingCompleted(rating) {
-  //   console.log('Rating is: ' + rating);
-  //   setRatingInput(rating);
-  // }
-
-  // function addTaskHandler() {
-  //   setCurrentTasks((currentTasks) => [
-  //     ...currentTasks,
-  //     { text: taskInput, rating: ratingInput, id: Math.random().toString() },
-  //   ]);
-  // }
 
   return (
     <View style={styles.screen}>

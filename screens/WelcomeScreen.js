@@ -7,8 +7,6 @@ import CartsContext from '../utils/CartsContext';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Welcome() {
-  const navigation = useNavigation();
-
   return (
     <View style={styles.screen}>
       <Text style={{ fontSize: font.size_2 }}>Welcome to</Text>
