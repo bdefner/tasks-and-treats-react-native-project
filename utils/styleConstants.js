@@ -17,6 +17,7 @@ export const colors = {
   green_2: '#64de87',
   green_3: '#97e9af',
   purple_1: '#8D40CA',
+  purple_2: '#ba8bde',
   redAlert: '#ea3c59',
   greyBorder: '#e1e1e1',
   yellowStar: '#fdd800',

@@ -21,19 +21,13 @@ export default function Challenges() {
         <Text style={styles.headerText}>🚀 Challenges</Text>
       </View>
       <View>
-        <ScrollView>
-          {Global.allChallenges.map((challenge) => {
-            return (
-              <View style={styles.menuCategoryWrap}>
-                <ChallengeItem
-                  label={challenge.label}
-                  description={challenge.description}
-                  reward={challenge.reward}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
+        <FlatList
+          data={Global.allChallenges}
+          renderItem={ChallengeItem}
+          keyExtractor={(challenge) => challenge.challengeId}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
     </View>
   );
@@ -42,6 +36,7 @@ export default function Challenges() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: colors.purple_2,
   },
   headerWrap: {
     alignItems: 'center',
