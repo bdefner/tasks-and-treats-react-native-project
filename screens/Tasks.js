@@ -91,7 +91,6 @@ export default function TaskList({ route }) {
           <StarBudgetDisplay />
         </View>
         <Text style={styles.headerText}>Tasks</Text>
-        <View></View>
       </View>
       {/* On top horizontal scroll navigation */}
 

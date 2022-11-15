@@ -35,6 +35,30 @@ async function fetchUserCarts(userId) {
   }
 }
 
+async function FetchChallenges(userId, sessionToken) {
+  const apiBaseUrl = 'http://localhost:3000/api/getchallenges';
+
+  try {
+    const response = await fetch(apiBaseUrl, {
+      method: 'POST',
+      header: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        mode: 'no-cors',
+      },
+      body: JSON.stringify({
+        userId: userId,
+        sessionToken: sessionToken,
+      }),
+    });
+    const json = await response.json();
+    console.log('json: ', json);
+    return json;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export default function FetchUserDataAndRedirect({ route }) {
   const navigation = useNavigation();
   const userId = route.params.user.userId;
@@ -44,18 +68,19 @@ export default function FetchUserDataAndRedirect({ route }) {
 
   // Storing user information in ../utils/global.js
 
-  console.log('route.params.user:', route.params.user);
   Global.username = route.params.user.username;
   Global.userId = route.params.user.userId;
   // Global.budget = route.params.user.budget;
-
-  console.log('Budget after FetchData... ', budget);
 
   StoreSessionTokenInGlobal();
 
   useEffect(async () => {
     setCarts(await fetchUserCarts(userId));
     setBudget(route.params.user.budget);
+    Global.allChallenges = await FetchChallenges(
+      route.params.user.userId,
+      Global.sessionToken,
+    );
   }, []);
 
   setTimeout(() => {

@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AboutScreen from '../screens/AboutScreen';
 import AddFriend from '../screens/AddFriend';
+import Challenges from '../screens/Challenges';
 import CreateNew from '../screens/CreateNew';
-import Help from '../screens/Help';
 import Settings from '../screens/Settings';
 import Tasks from '../screens/Tasks';
 import Treats from '../screens/Treats';
@@ -136,13 +136,13 @@ export default function TabBar({ route }) {
         }}
       />
       <Tab.Screen
-        name="Help"
-        component={Help}
+        name="Challenges"
+        component={Challenges}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapWithIcon}>
               <Image
-                source={require('../assets/icons/help.png')}
+                source={require('../assets/icons/challenge.png')}
                 resizeMode="contain"
                 style={styles.navIconStyle}
               />
@@ -152,7 +152,7 @@ export default function TabBar({ route }) {
                   fontSize: 10,
                 }}
               >
-                Help
+                Challenge
               </Text>
             </View>
           ),

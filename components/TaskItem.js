@@ -74,9 +74,33 @@ export default function TaskList(props) {
   const [currentStatusId, setCurrentStatusId] = useState(props.statusId);
   const [budget, setBudget] = useContext(budgetContext);
 
-  async function updateBudget(rating) {
-    // Update the budget in local storage
+  async function updateBudget(budget, params) {
+    const apiBaseUrl = 'http://localhost:3000/api/updateuser';
     // Update the budget on the database
+
+    console.log('params: ', params);
+    console.log('budget: ', budget);
+
+    try {
+      const response = await fetch(apiBaseUrl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'content-type': 'application/json',
+          mode: 'no-cors',
+        },
+        body: JSON.stringify({
+          userId: params.userId,
+          sessionToken: params.sessionToken,
+          budget: budget,
+        }),
+      });
+      const json = await response.json();
+      console.log('json: ', json);
+      return json;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // Creating parameters for fetching
@@ -146,15 +170,14 @@ export default function TaskList(props) {
               <Pressable
                 onPress={async () => {
                   // Add stars to budget
-                  setBudget(budget + params.rating);
-                  console.log('Budet after Click: ', budget);
 
-                  updateBudget(params.rating);
+                  updateBudget(budget + params.rating, params);
+                  setBudget(budget + params.rating);
                   // Update statusId in params
                   params.statusId = 2;
                   // Update cart in database
                   const response = await updateCartHandler(params);
-                  console.log('response ', response);
+
                   // Update cart in local state
                   const newCarts = carts.map((cart) => {
                     if (cart.cartId === params.cartId) {
@@ -208,6 +231,11 @@ export default function TaskList(props) {
           <View>
             <Pressable
               onPress={async () => {
+                // Remove stars from budget
+
+                updateBudget(budget - params.rating, params);
+                setBudget(budget - params.rating);
+
                 // Update statusId in params
                 params.statusId = 1;
                 // Update cart in database
