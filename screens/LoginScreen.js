@@ -81,6 +81,7 @@ export default function Login() {
             <TextInput
               style={styles.inputField}
               placeholder="username"
+              autoCorrect={false}
               onChangeText={setUsername}
             />
           </View>

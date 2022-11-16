@@ -1,112 +1,130 @@
-import { useContext, useState } from 'react';
+import Lottie from 'lottie-react-native';
+import { useContext, useEffect, useState } from 'react';
 import {
   Button,
   FlatList,
+  Image,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
-import { Rating } from 'react-native-ratings';
+import ConditionalRuler from '../components/ConditionalRuler';
+import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import TaskItem from '../components/TaskItem';
+import TreatItem from '../components/TreatItem';
 import CartsContext from '../utils/CartsContext';
-// import { carts } from '../database/carts';
-// import { groups } from '../database/groups';
 import { colors, font, spacing } from '../utils/styleConstants';
 
-function filterCartsForPersonalTreats(carts) {
+function filterCartsForPersonalActiveTreats(carts) {
   const filteredCarts = carts.filter((item) => {
-    return item.typeId === 2 && !item.groupId;
+    return item.typeId === 2 && item.statusId === 1 && !item.groupId;
   });
   return filteredCarts;
 }
 
+function filterCartsForPersonalInactiveTreats(carts) {
+  const filteredCarts = carts.filter((item) => {
+    return item.typeId === 2 && item.statusId === 2 && !item.groupId;
+  });
+  const reversedFilteredCarts = filteredCarts.reverse();
+
+  return filteredCarts;
+}
+
+function FillEmptyScreen(props) {
+  if (props.isScreenEmpty) {
+    return (
+      <View style={styles.createFirstWrap}>
+        <Image
+          source={require('../assets/grafics/create-first-task.png')}
+          style={{ width: 248, height: 415 }}
+        />
+      </View>
+    );
+  }
+}
+
+function isScreenEmpty(currentActiveCarts, currentInactiveCarts) {
+  if (!currentActiveCarts[0] && !currentInactiveCarts[0]) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 export default function TaskList({ route }) {
-  const [taskInput, setTaskInput] = useState('');
-  const [CurrentTasks, setCurrentTasks] = useState([]);
-  const [ratingInput, setRatingInput] = useState(5);
-  const [currentCartId, setCurrentCartId] = useState(1);
   const [carts, setCarts] = useContext(CartsContext);
 
-  const currentCarts = filterCartsForPersonalTreats(carts);
+  const [currentActiveCarts, setCurrentActiveCarts] = useState(
+    filterCartsForPersonalActiveTreats(carts),
+  );
+  const [currentInactiveCarts, setCurrentInactiveCarts] = useState(
+    filterCartsForPersonalInactiveTreats(carts),
+  );
 
-  function taskInputHandler(input) {
-    setTaskInput(input);
-  }
-
-  function ratingCompleted(rating) {
-    console.log('Rating is: ' + rating);
-    setRatingInput(rating);
-  }
-
-  function addTaskHandler() {
-    setTasks((currentTasks) => [
-      ...currentTasks,
-      { text: taskInput, rating: ratingInput, id: Math.random().toString() },
-    ]);
-  }
+  useEffect(() => {
+    setCurrentActiveCarts(filterCartsForPersonalActiveTreats(carts));
+    setCurrentInactiveCarts(filterCartsForPersonalInactiveTreats(carts));
+    if (!currentActiveCarts[0] && !currentInactiveCarts[0]) {
+    }
+  }, [carts]);
 
   return (
     <View style={styles.screen}>
       <View style={styles.headerWrap}>
+        <View
+          style={{
+            position: 'absolute',
+            left: spacing.medium_1,
+            bottom: spacing.medium_1,
+          }}
+        >
+          <StarBudgetDisplay />
+        </View>
         <Text style={styles.headerText}>Treats</Text>
       </View>
-      {/* On top horizontal scroll navigation */}
 
-      <View>
-        {/* <FlatList
-          horizontal={true}
-          data={groups}
-          renderItem={(group) => {
+      <FillEmptyScreen
+        isScreenEmpty={isScreenEmpty(currentActiveCarts, currentInactiveCarts)}
+      />
+      {/*
+      FlatList is not used, since there are two list to be rendered in one scrollview. Performance should be good, even with long lists
+      */}
+      <ScrollView>
+        <View style={styles.itemListContainer}>
+          {currentActiveCarts.map((cart) => {
             return (
-              <Pressable
-                onPress={() => {
-                  setCurrentCartId(group.item.id);
-                }}
-                style={{
-                  margin: spacing.medium_1,
-                  padding: spacing.small,
-                  borderWidth: 1,
-                  borderRadius: spacing.small,
-                  backgroundColor:
-                    group.item.id === currentCartId ? colors.green_1 : 'white',
-                  borderColor: colors.green_1,
-                }}
-              >
-                <Text
-                  style={{
-                    color:
-                      group.item.id === currentCartId
-                        ? 'white'
-                        : colors.green_1,
-                  }}
-                >
-                  {group.item.name}
-                </Text>
-              </Pressable>
-            );
-          }}
-        /> */}
-      </View>
-      <View style={styles.itemListContainer}>
-        <FlatList
-          data={currentCarts}
-          keyExtractor={(item) => item.cartId}
-          inverted={true}
-          contentContainerStyle={{ flexGrow: 1, justifyContent: 'flex-end' }}
-          renderItem={(cart) => {
-            return (
-              <TaskItem
-                text={cart.item.label}
-                id={cart.item.cartId}
-                rating={cart.item.rating}
-                typeId={cart.item.typeId}
+              <TreatItem
+                text={cart.label}
+                typeId={cart.typeId}
+                statusId={cart.statusId}
+                cartId={cart.cartId}
+                rating={cart.rating}
               />
             );
-          }}
-        />
-      </View>
+          })}
+          {
+            <ConditionalRuler
+              label="😎 see what you've done 👇"
+              condition={currentInactiveCarts[0]}
+            />
+          }
+          {currentInactiveCarts.map((cart) => {
+            return (
+              <TaskItem
+                text={cart.label}
+                typeId={cart.typeId}
+                statusId={cart.statusId}
+                cartId={cart.cartId}
+                rating={cart.rating}
+              />
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 }
@@ -115,18 +133,32 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
-
+  headerWrap: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: spacing.medium_1,
+    backgroundColor: colors.purple_1,
+    borderBottomColor: colors.greyBorder,
+    borderBottomWidth: 2,
+  },
   topNavigationItem: {
     margin: spacing.medium_1,
     padding: spacing.small,
     borderWidth: 1,
     borderRadius: spacing.small,
   },
+  createFirstWrap: {
+    flex: 100,
+    padding: spacing.medium_1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   itemListContainer: {
-    flex: 1,
+    flex: 100,
     padding: spacing.medium_1,
     borderWidth: 0,
   },
+
   inputContainer: {
     padding: spacing.medium_1,
     flex: 4,
@@ -148,14 +180,7 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flex: 1,
   },
-  headerWrap: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing.medium_1,
-    backgroundColor: colors.purple_1,
-    borderBottomColor: colors.greyBorder,
-    borderBottomWidth: 2,
-  },
+
   headerText: {
     marginTop: spacing.large_2,
     fontSize: font.size_4,

@@ -71,6 +71,9 @@ export default function Signup() {
             style={styles.inputField}
             placeholder="username"
             onChangeText={setUsername}
+            autoCorrect={false}
+            textContentType="username"
+            autoComplete="username"
           />
         </View>
         <View style={styles.inputFieldWrap}>
@@ -78,6 +81,9 @@ export default function Signup() {
             style={styles.inputField}
             placeholder="e-mail"
             onChangeText={setEmail}
+            autoCorrect={false}
+            textContentType="emailAddress"
+            autoComplete="email"
           />
         </View>
         <View style={styles.inputFieldWrap}>
@@ -86,6 +92,7 @@ export default function Signup() {
             placeholder="password"
             onChangeText={setPassword}
             textContentType="newPassword"
+            autoCorrect={false}
           />
         </View>
 
@@ -94,7 +101,8 @@ export default function Signup() {
             style={styles.inputField}
             placeholder="repeat password"
             onChangeText={setPasswordTest}
-            extContentType="password"
+            textContentType="password"
+            autoCorrect={false}
           />
         </View>
       </View>

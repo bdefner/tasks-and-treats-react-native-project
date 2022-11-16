@@ -14,9 +14,7 @@ import cartsContext from '../utils/CartsContext';
 import Global from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
 
-function getTintColorBasedOnStatusAndType(typeId, statusId) {
-  if (typeId === 1 && statusId == 1) return colors.green_1;
-  if (typeId === 1 && statusId == 2) return colors.green_2;
+function getTintColorBasedOnStatus(typeId, statusId) {
   if (typeId === 2 && statusId == 1) return colors.purple_1;
   if (typeId === 2 && statusId == 2) return colors.purple_2;
 }
@@ -123,10 +121,7 @@ export default function TaskList(props) {
     rating: currentRating,
   };
 
-  const tintColor = getTintColorBasedOnStatusAndType(
-    props.typeId,
-    currentStatusId,
-  );
+  const tintColor = getTintColorBasedOnStatus(props.typeId, currentStatusId);
 
   return (
     <View
@@ -142,7 +137,7 @@ export default function TaskList(props) {
           onChangeText={setCurrentLabel}
           style={{
             ...styles.taskItemText,
-            backgroundColor: isEditing ? colors.green_2 : colors.green_1,
+            backgroundColor: isEditing ? colors.purple_2 : colors.purple_1,
           }}
           value={currentLabel}
         />
@@ -152,7 +147,7 @@ export default function TaskList(props) {
           <View
             style={{
               ...styles.ratingWrap,
-              backgroundColor: isEditing ? colors.green_2 : colors.green_1,
+              backgroundColor: isEditing ? colors.purple_2 : colors.purple_1,
             }}
           >
             <Rating
@@ -160,7 +155,7 @@ export default function TaskList(props) {
               type="star"
               ratingCount={10}
               imageSize={17}
-              tintColor={isEditing ? colors.green_2 : colors.green_1}
+              tintColor={isEditing ? colors.purple_2 : colors.purple_1}
               readonly={isEditing ? false : true}
               onFinishRating={setCurrentRating}
             />
@@ -194,8 +189,13 @@ export default function TaskList(props) {
                     console.log('carts: ', carts);
                   }}
                 >
-                  <View style={styles.saveButton}>
-                    <Text style={{ color: colors.green_1 }}>save</Text>
+                  <View
+                    style={{
+                      ...styles.textButton,
+                      marginRight: spacing.medium_1,
+                    }}
+                  >
+                    <Text style={{ color: colors.purple_1 }}>save</Text>
                   </View>
                 </Pressable>
               ) : (
@@ -250,10 +250,9 @@ export default function TaskList(props) {
                   setCarts(newCarts);
                 }}
               >
-                <Image
-                  source={require('../assets/icons/done.png')}
-                  style={{ ...styles.icons }}
-                />
+                <View style={styles.textButton}>
+                  <Text style={{ color: colors.purple_1 }}>redeem</Text>
+                </View>
               </Pressable>
             </View>
           </View>
@@ -359,13 +358,12 @@ const styles = StyleSheet.create({
     height: spacing.medium_1,
     tintColor: colors.yellowStar,
   },
-  saveButton: {
+  textButton: {
     paddingLeft: spacing.small,
     paddingRight: spacing.small,
     paddingTop: 5,
     paddingBottom: 5,
     backgroundColor: 'white',
     borderRadius: spacing.small,
-    marginRight: spacing.medium_1,
   },
 });

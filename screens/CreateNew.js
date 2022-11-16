@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import {
+  Alert,
   Button,
   Dimensions,
+  Image,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -12,12 +14,15 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
+import { TypeFlags } from 'typescript';
 import CartsContext from '../utils/CartsContext';
 import Global from '../utils/globals';
-import { colors, spacing } from '../utils/styleConstants';
+import { colors, font, spacing } from '../utils/styleConstants';
 
 async function createCartHandler(params) {
   const apiBaseUrl = 'http://localhost:3000/api/createcart';
+
+  console.log('params', params);
 
   try {
     const response = await fetch(apiBaseUrl, {
@@ -54,8 +59,7 @@ export default function CreateNew({ route }) {
 
   // If category is true, it's a tasks, else it's a treat
   const [type, setType] = useState(true);
-  const [assignedTo, setAssignedTo] = useState('self');
-  const [currentRating, setCurrentRating] = useState(10);
+  const [currentRating, setCurrentRating] = useState(5);
   const [label, setLabel] = useState('');
   const [dueDate, setDueDate] = useState();
   const [assignedToUserId, setAssignedToUserId] = useState();
@@ -109,15 +113,25 @@ export default function CreateNew({ route }) {
         <Text style={{ textAlign: 'center' }}>What would you like to add?</Text>
         <View style={styles.toggleWrap}>
           <Pressable
-            onPress={() => setType(true)}
+            onPress={() => {
+              setType(true);
+              setCurrentRating(5);
+            }}
             style={
               type
                 ? {
                     ...styles.toggle,
                     borderColor: colors.green_1,
                     backgroundColor: colors.green_1,
+                    borderBottomEndRadius: 0,
+                    borderTopEndRadius: 0,
                   }
-                : { ...styles.toggle, borderColor: colors.green_1 }
+                : {
+                    ...styles.toggle,
+                    borderColor: colors.green_1,
+                    borderBottomEndRadius: 0,
+                    borderTopEndRadius: 0,
+                  }
             }
           >
             <Text style={type ? { color: 'white' } : { color: colors.green_1 }}>
@@ -125,17 +139,24 @@ export default function CreateNew({ route }) {
             </Text>
           </Pressable>
           <Pressable
-            onPress={() => setType(false)}
+            onPress={() => {
+              setType(false);
+              setCurrentRating(10);
+            }}
             style={
               type
                 ? {
                     ...styles.toggle,
                     borderColor: colors.purple_1,
+                    borderBottomStartRadius: 0,
+                    borderTopStartRadius: 0,
                   }
                 : {
                     ...styles.toggle,
                     borderColor: colors.purple_1,
                     backgroundColor: colors.purple_1,
+                    borderBottomStartRadius: 0,
+                    borderTopStartRadius: 0,
                   }
             }
           >
@@ -155,34 +176,93 @@ export default function CreateNew({ route }) {
             onChangeText={setLabel}
           />
         </SafeAreaView>
-        <View style={styles.ratingWrap}>
-          <Text>Rate it</Text>
-          <Rating
-            type="star"
-            ratingCount={10}
-            imageSize={17}
-            tintColor={'white'}
-            onFinishRating={ratingCompleted}
-          />
-          <Text>{currentRating} / 10</Text>
-        </View>
+        {type ? (
+          <View style={styles.ratingWrap}>
+            <Text>Rate it</Text>
+            <Rating
+              type="star"
+              ratingCount={10}
+              imageSize={17}
+              tintColor={'white'}
+              onFinishRating={setCurrentRating}
+            />
+            <Text>{currentRating} / 10</Text>
+          </View>
+        ) : (
+          <View style={styles.ratingWrap}>
+            <Text>Rate it</Text>
+            <View style={styles.ratingTextInputWrap}>
+              <Image
+                source={require('../assets/icons/star.png')}
+                style={styles.starIcon}
+              />
+
+              <Text>{currentRating}</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <Pressable
+                onPress={() => {
+                  currentRating > 1 && setCurrentRating(currentRating - 1);
+                }}
+              >
+                <View
+                  style={{
+                    ...styles.changeRateButton,
+                    borderBottomEndRadius: 0,
+                    borderTopEndRadius: 0,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                    -
+                  </Text>
+                </View>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  currentRating < 999 && setCurrentRating(currentRating + 1);
+                }}
+              >
+                <View
+                  style={{
+                    ...styles.changeRateButton,
+                    borderBottomStartRadius: 0,
+                    borderTopStartRadius: 0,
+                  }}
+                >
+                  <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                    +
+                  </Text>
+                </View>
+              </Pressable>
+            </View>
+          </View>
+        )}
       </View>
       <Pressable
         style={styles.createButton}
         onPress={async () => {
-          const response = await createCartHandler(params);
-          // If response is 200, add cardId, remove sessionToken and add the  new cart to carts
-          if (response.cart.cartId) {
-            params.cartId = response.cart.cartId;
-            delete params.sessionToken;
-            setCarts((carts) => [...carts, params]);
-            console.log('new carts:', carts);
+          if (!label) {
+            Alert.alert(
+              '🤔 Description is missing',
+              `Click into "describe your ${
+                type ? 'task' : 'treat'
+              } ..." and give it some text!`,
+            );
+          } else {
+            const response = await createCartHandler(params);
+            // If response is 200, add cardId, remove sessionToken and add the  new cart to carts
+            if (response.cart.cartId) {
+              params.cartId = response.cart.cartId;
+              delete params.sessionToken;
+              setCarts((carts) => [...carts, params]);
+              console.log('new carts:', carts);
 
-            // Navigate back to Tasks or Treats
-            if (type) {
-              navigation.navigate('Tasks');
-            } else {
-              navigation.navigate('Treats');
+              // Navigate back to Tasks or Treats
+              if (type) {
+                navigation.navigate('Tasks');
+              } else {
+                navigation.navigate('Treats');
+              }
             }
           }
         }}
@@ -204,12 +284,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   toggleWrap: {
+    padding: spacing.medium_2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   toggle: {
-    margin: spacing.medium_2,
     padding: spacing.small,
     paddingLeft: spacing.medium_2,
     paddingRight: spacing.medium_2,
@@ -220,6 +300,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.medium_2,
     marginBottom: spacing.medium_2,
     textAlign: 'center',
+    color: colors.black,
   },
   innerWrap: {
     marginTop: spacing.large_1,
@@ -231,7 +312,35 @@ const styles = StyleSheet.create({
   ratingWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: spacing.medium_2,
+  },
+  ratingTextInputWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  rateTextInput: {
+    minWidth: 50,
+    fontSize: font.size_2,
+    padding: spacing.small,
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    borderRadius: spacing.small,
+    marginLeft: spacing.small,
+  },
+  changeRateButton: {
+    padding: 3,
+    paddingLeft: spacing.medium_1,
+    paddingRight: spacing.medium_1,
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    backgroundColor: colors.yellowStar,
+    borderRadius: spacing.small,
+  },
+  starIcon: {
+    width: spacing.medium_2,
+    height: spacing.medium_2,
+    marginRight: spacing.small,
   },
   createButton: {
     margin: spacing.medium_2,
