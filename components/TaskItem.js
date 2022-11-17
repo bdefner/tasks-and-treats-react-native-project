@@ -9,8 +9,8 @@ import {
   View,
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
-import budgetContext from '../utils/BudgetContext';
-import cartsContext from '../utils/CartsContext';
+import budgetContext from '../utils/context/BudgetContext';
+import cartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
 
@@ -142,7 +142,12 @@ export default function TaskList(props) {
           onChangeText={setCurrentLabel}
           style={{
             ...styles.taskItemText,
-            backgroundColor: isEditing ? colors.green_2 : colors.green_1,
+            backgroundColor:
+              params.statusId === 2
+                ? colors.green_2
+                : isEditing
+                ? colors.green_2
+                : colors.green_1,
           }}
           value={currentLabel}
         />
@@ -229,32 +234,36 @@ export default function TaskList(props) {
               </Pressable>
             </View>
             <View>
-              <Pressable
-                onPress={async () => {
-                  // Add stars to budget
+              {isEditing ? (
+                <View></View>
+              ) : (
+                <Pressable
+                  onPress={async () => {
+                    // Add stars to budget
 
-                  updateBudget(budget + params.rating, params);
-                  setBudget(budget + params.rating);
-                  // Update statusId in params
-                  params.statusId = 2;
-                  // Update cart in database
-                  const response = await updateCartHandler(params);
+                    updateBudget(budget + params.rating, params);
+                    setBudget(budget + params.rating);
+                    // Update statusId in params
+                    params.statusId = 2;
+                    // Update cart in database
+                    const response = await updateCartHandler(params);
 
-                  // Update cart in local state
-                  const newCarts = carts.map((cart) => {
-                    if (cart.cartId === params.cartId) {
-                      return { ...cart, statusId: 2 };
-                    }
-                    return cart;
-                  });
-                  setCarts(newCarts);
-                }}
-              >
-                <Image
-                  source={require('../assets/icons/done.png')}
-                  style={{ ...styles.icons }}
-                />
-              </Pressable>
+                    // Update cart in local state
+                    const newCarts = carts.map((cart) => {
+                      if (cart.cartId === params.cartId) {
+                        return { ...cart, statusId: 2 };
+                      }
+                      return cart;
+                    });
+                    setCarts(newCarts);
+                  }}
+                >
+                  <Image
+                    source={require('../assets/icons/done.png')}
+                    style={{ ...styles.icons }}
+                  />
+                </Pressable>
+              )}
             </View>
           </View>
         </View>

@@ -8,9 +8,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { Rating } from 'react-native-ratings';
-import budgetContext from '../utils/BudgetContext';
-import cartsContext from '../utils/CartsContext';
+import budgetContext from '../utils/context/BudgetContext';
+import cartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
 
@@ -85,9 +84,6 @@ export default function TaskList(props) {
     const apiBaseUrl = 'http://localhost:3000/api/updateuser';
     // Update the budget on the database
 
-    console.log('params: ', params);
-    console.log('budget: ', budget);
-
     try {
       const response = await fetch(apiBaseUrl, {
         method: 'POST',
@@ -137,7 +133,12 @@ export default function TaskList(props) {
           onChangeText={setCurrentLabel}
           style={{
             ...styles.taskItemText,
-            backgroundColor: isEditing ? colors.purple_2 : colors.purple_1,
+            backgroundColor:
+              params.statusId === 2
+                ? colors.purple_2
+                : isEditing
+                ? colors.purple_2
+                : colors.purple_1,
           }}
           value={currentLabel}
         />
@@ -150,19 +151,70 @@ export default function TaskList(props) {
               backgroundColor: isEditing ? colors.purple_2 : colors.purple_1,
             }}
           >
-            <Rating
-              startingValue={params.rating}
-              type="star"
-              ratingCount={10}
-              imageSize={17}
-              tintColor={isEditing ? colors.purple_2 : colors.purple_1}
-              readonly={isEditing ? false : true}
-              onFinishRating={setCurrentRating}
-            />
+            <View
+              style={{
+                ...styles.flexRowCenter,
+                justifyContent: 'center',
+              }}
+            >
+              <View style={styles.flexRowCenter}>
+                <Image
+                  source={require('../assets/icons/star.png')}
+                  style={styles.starIcon}
+                />
+
+                <Text style={{ color: 'white' }}>{currentRating}</Text>
+                {isEditing && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginLeft: spacing.medium_1,
+                    }}
+                  >
+                    <Pressable
+                      onPress={() => {
+                        currentRating > 1 &&
+                          setCurrentRating(currentRating - 1);
+                      }}
+                    >
+                      <View
+                        style={{
+                          ...styles.changeRateButton,
+                          borderBottomEndRadius: 0,
+                          borderTopEndRadius: 0,
+                        }}
+                      >
+                        <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                          -
+                        </Text>
+                      </View>
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        currentRating < 999 &&
+                          setCurrentRating(currentRating + 1);
+                      }}
+                    >
+                      <View
+                        style={{
+                          ...styles.changeRateButton,
+                          borderBottomStartRadius: 0,
+                          borderTopStartRadius: 0,
+                        }}
+                      >
+                        <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                          +
+                        </Text>
+                      </View>
+                    </Pressable>
+                  </View>
+                )}
+              </View>
+            </View>
           </View>
 
           <View style={styles.iconMenuWrap}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={styles.flexRowCenter}>
               {isEditing ? (
                 <Pressable
                   onPress={async () => {
@@ -182,11 +234,6 @@ export default function TaskList(props) {
                       return cart;
                     });
                     setCarts(newCarts);
-
-                    console.log('currentRating: ', currentRating);
-                    console.log('currentLabel: ', currentLabel);
-                    console.log('params: ', params);
-                    console.log('carts: ', carts);
                   }}
                 >
                   <View
@@ -229,31 +276,38 @@ export default function TaskList(props) {
               </Pressable>
             </View>
             <View>
-              <Pressable
-                onPress={async () => {
-                  // Add stars to budget
+              {currentRating > budget ? (
+                <Text style={{ color: 'white' }}>
+                  you need {currentRating - budget} more stars
+                </Text>
+              ) : isEditing ? (
+                <View></View>
+              ) : (
+                <Pressable
+                  onPress={async () => {
+                    // Remove stars to budget
+                    updateBudget(budget - params.rating, params);
+                    setBudget(budget - params.rating);
+                    // Update statusId in params
+                    params.statusId = 2;
+                    // Update cart in database
+                    const response = await updateCartHandler(params);
 
-                  updateBudget(budget + params.rating, params);
-                  setBudget(budget + params.rating);
-                  // Update statusId in params
-                  params.statusId = 2;
-                  // Update cart in database
-                  const response = await updateCartHandler(params);
-
-                  // Update cart in local state
-                  const newCarts = carts.map((cart) => {
-                    if (cart.cartId === params.cartId) {
-                      return { ...cart, statusId: 2 };
-                    }
-                    return cart;
-                  });
-                  setCarts(newCarts);
-                }}
-              >
-                <View style={styles.textButton}>
-                  <Text style={{ color: colors.purple_1 }}>redeem</Text>
-                </View>
-              </Pressable>
+                    // Update cart in local state
+                    const newCarts = carts.map((cart) => {
+                      if (cart.cartId === params.cartId) {
+                        return { ...cart, statusId: 2 };
+                      }
+                      return cart;
+                    });
+                    setCarts(newCarts);
+                  }}
+                >
+                  <View style={styles.textButton}>
+                    <Text style={{ color: colors.purple_1 }}>redeem</Text>
+                  </View>
+                </Pressable>
+              )}
             </View>
           </View>
         </View>
@@ -292,10 +346,12 @@ export default function TaskList(props) {
           <View>
             <Pressable
               onPress={async () => {
-                // Remove stars from budget
+                console.log('params.rating:', params.rating);
 
-                updateBudget(budget - params.rating, params);
-                setBudget(budget - params.rating);
+                // Put stars back to budget
+
+                updateBudget(budget + params.rating, params);
+                setBudget(budget + params.rating);
 
                 // Update statusId in params
                 params.statusId = 1;
@@ -309,7 +365,6 @@ export default function TaskList(props) {
                   }
                   return cart;
                 });
-                console.log('newCarts: ', newCarts);
                 setCarts(newCarts);
               }}
             >
@@ -337,6 +392,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     padding: spacing.small,
     borderRadius: spacing.small,
+    backgroundColor: colors.purple_2,
   },
   ratingWrap: {
     margin: spacing.medium_1,
@@ -358,12 +414,30 @@ const styles = StyleSheet.create({
     height: spacing.medium_1,
     tintColor: colors.yellowStar,
   },
+  starIcon: {
+    width: spacing.medium_2,
+    height: spacing.medium_2,
+    marginRight: spacing.small,
+  },
   textButton: {
     paddingLeft: spacing.small,
     paddingRight: spacing.small,
     paddingTop: 5,
     paddingBottom: 5,
     backgroundColor: 'white',
+    borderRadius: spacing.small,
+  },
+  flexRowCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  changeRateButton: {
+    padding: 3,
+    paddingLeft: spacing.medium_1,
+    paddingRight: spacing.medium_1,
+    borderColor: colors.greyBorder,
+    borderWidth: 1,
+    backgroundColor: colors.yellowStar,
     borderRadius: spacing.small,
   },
 });

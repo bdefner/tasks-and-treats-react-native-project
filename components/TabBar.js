@@ -17,7 +17,11 @@ const SettingsStack = createNativeStackNavigator();
 function CreateNewStackScreen() {
   return (
     <CreateNewStack.Navigator>
-      <CreateNewStack.Screen name="CreateNew" component={CreateNew} />
+      <CreateNewStack.Screen
+        name="CreateNew"
+        component={CreateNew}
+        options={{ headerShown: false }}
+      />
       <CreateNewStack.Screen name="AddFriend" component={AddFriend} />
     </CreateNewStack.Navigator>
   );
@@ -99,6 +103,7 @@ export default function TabBar({ route }) {
         component={CreateNewStackScreen}
         initialParams={{ user: route.params.user }}
         options={{
+          headerShown: false,
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapCreateNew}>
               <Image
@@ -152,7 +157,7 @@ export default function TabBar({ route }) {
                   fontSize: 10,
                 }}
               >
-                Challenge
+                Challenges
               </Text>
             </View>
           ),

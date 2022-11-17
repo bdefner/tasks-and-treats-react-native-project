@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import AuthWrap from '../components/AuthWrap';
 import TabBar from '../components/TabBar';
-import CartsContext from '../utils/CartsContext';
+import CartsContext from '../utils/context/CartsContext';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Welcome() {
@@ -15,7 +15,7 @@ export default function Welcome() {
         source={require('../assets/grafics/welcome.png')}
         style={styles.welcomeImg}
       />
-      <Text>An anti-procrastination app</Text>
+      <Text>A get-things-done app</Text>
       <Text>that's fun to use</Text>
       <View>
         <AuthWrap />

@@ -15,7 +15,7 @@ import { Rating } from 'react-native-ratings';
 import ConditionalRuler from '../components/ConditionalRuler';
 import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import TaskItem from '../components/TaskItem';
-import CartsContext from '../utils/CartsContext';
+import CartsContext from '../utils/context/CartsContext';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 function filterCartsForPersonalActiveTasks(carts) {
@@ -40,7 +40,7 @@ function FillEmptyScreen(props) {
       <View style={styles.createFirstWrap}>
         <Image
           source={require('../assets/grafics/create-first-task.png')}
-          style={{ width: 248, height: 415 }}
+          style={{ width: 280, height: 425 }}
         />
       </View>
     );
@@ -56,14 +56,7 @@ function isScreenEmpty(currentActiveCarts, currentInactiveCarts) {
 }
 
 export default function TaskList({ route }) {
-  // const [taskInput, setTaskInput] = useState('');
-  // const [ratingInput, setRatingInput] = useState(5);
-  // const [currentCartId, setCurrentCartId] = useState(1);
-
   const [carts, setCarts] = useContext(CartsContext);
-  // const [currentBudget, setCurrentBudget] = useContext(budgetContext);
-  // setCurrentBudget(10);
-
   const [currentActiveCarts, setCurrentActiveCarts] = useState(
     filterCartsForPersonalActiveTasks(carts),
   );
@@ -92,44 +85,6 @@ export default function TaskList({ route }) {
         </View>
         <Text style={styles.headerText}>Tasks</Text>
       </View>
-      {/* On top horizontal scroll navigation */}
-
-      <View>
-        {/* <FlatList
-          horizontal={true}
-          data={groups}
-          renderItem={(group) => {
-            return (
-              <Pressable
-                onPress={() => {
-                  setCurrentCartId(group.item.id);
-                }}
-                style={{
-                  margin: spacing.medium_1,
-                  padding: spacing.small,
-                  borderWidth: 1,
-                  borderRadius: spacing.small,
-                  backgroundColor:
-                    group.item.id === currentCartId ? colors.green_1 : 'white',
-                  borderColor: colors.green_1,
-                }}
-              >
-                <Text
-                  style={{
-                    color:
-                      group.item.id === currentCartId
-                        ? 'white'
-                        : colors.green_1,
-                  }}
-                >
-                  {group.item.name}
-                </Text>
-              </Pressable>
-            );
-          }}
-        /> */}
-      </View>
-
       <FillEmptyScreen
         isScreenEmpty={isScreenEmpty(currentActiveCarts, currentInactiveCarts)}
       />
@@ -146,6 +101,7 @@ export default function TaskList({ route }) {
                 statusId={cart.statusId}
                 cartId={cart.cartId}
                 rating={cart.rating}
+                key={cart.id}
               />
             );
           })}
@@ -163,6 +119,7 @@ export default function TaskList({ route }) {
                 statusId={cart.statusId}
                 cartId={cart.cartId}
                 rating={cart.rating}
+                key={cart.id}
               />
             );
           })}
@@ -226,7 +183,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginTop: spacing.large_2,
-    fontSize: font.size_4,
+    fontSize: font.size_3,
     color: 'white',
   },
 });

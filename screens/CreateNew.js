@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { TypeFlags } from 'typescript';
-import CartsContext from '../utils/CartsContext';
+import CartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals';
 import { colors, font, spacing } from '../utils/styleConstants';
 
@@ -109,166 +109,182 @@ export default function CreateNew({ route }) {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.innerWrap}>
-        <Text style={{ textAlign: 'center' }}>What would you like to add?</Text>
-        <View style={styles.toggleWrap}>
-          <Pressable
-            onPress={() => {
-              setType(true);
-              setCurrentRating(5);
-            }}
-            style={
-              type
-                ? {
-                    ...styles.toggle,
-                    borderColor: colors.green_1,
-                    backgroundColor: colors.green_1,
-                    borderBottomEndRadius: 0,
-                    borderTopEndRadius: 0,
-                  }
-                : {
-                    ...styles.toggle,
-                    borderColor: colors.green_1,
-                    borderBottomEndRadius: 0,
-                    borderTopEndRadius: 0,
-                  }
-            }
-          >
-            <Text style={type ? { color: 'white' } : { color: colors.green_1 }}>
-              Task
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              setType(false);
-              setCurrentRating(10);
-            }}
-            style={
-              type
-                ? {
-                    ...styles.toggle,
-                    borderColor: colors.purple_1,
-                    borderBottomStartRadius: 0,
-                    borderTopStartRadius: 0,
-                  }
-                : {
-                    ...styles.toggle,
-                    borderColor: colors.purple_1,
-                    backgroundColor: colors.purple_1,
-                    borderBottomStartRadius: 0,
-                    borderTopStartRadius: 0,
-                  }
-            }
-          >
-            <Text
-              style={type ? { color: colors.purple_1 } : { color: 'white' }}
-            >
-              Treat
-            </Text>
-          </Pressable>
-        </View>
-        <SafeAreaView>
-          <TextInput
-            style={styles.textInput}
-            placeholder={
-              type ? 'Describe your task...' : 'Describe your treat...'
-            }
-            onChangeText={setLabel}
-          />
-        </SafeAreaView>
-        {type ? (
-          <View style={styles.ratingWrap}>
-            <Text>Rate it</Text>
-            <Rating
-              type="star"
-              ratingCount={10}
-              imageSize={17}
-              tintColor={'white'}
-              onFinishRating={setCurrentRating}
-            />
-            <Text>{currentRating} / 10</Text>
-          </View>
-        ) : (
-          <View style={styles.ratingWrap}>
-            <Text>Rate it</Text>
-            <View style={styles.ratingTextInputWrap}>
-              <Image
-                source={require('../assets/icons/star.png')}
-                style={styles.starIcon}
-              />
-
-              <Text>{currentRating}</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Pressable
-                onPress={() => {
-                  currentRating > 1 && setCurrentRating(currentRating - 1);
-                }}
-              >
-                <View
-                  style={{
-                    ...styles.changeRateButton,
-                    borderBottomEndRadius: 0,
-                    borderTopEndRadius: 0,
-                  }}
-                >
-                  <Text style={{ color: 'white', fontSize: font.size_3 }}>
-                    -
-                  </Text>
-                </View>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  currentRating < 999 && setCurrentRating(currentRating + 1);
-                }}
-              >
-                <View
-                  style={{
-                    ...styles.changeRateButton,
-                    borderBottomStartRadius: 0,
-                    borderTopStartRadius: 0,
-                  }}
-                >
-                  <Text style={{ color: 'white', fontSize: font.size_3 }}>
-                    +
-                  </Text>
-                </View>
-              </Pressable>
-            </View>
-          </View>
-        )}
+      <View style={styles.headerWrap}>
+        <View
+          style={{
+            position: 'absolute',
+            left: spacing.medium_1,
+            bottom: spacing.medium_1,
+          }}
+        ></View>
+        <Text style={styles.headerText}>Create new</Text>
       </View>
-      <Pressable
-        style={styles.createButton}
-        onPress={async () => {
-          if (!label) {
-            Alert.alert(
-              '🤔 Description is missing',
-              `Click into "describe your ${
-                type ? 'task' : 'treat'
-              } ..." and give it some text!`,
-            );
-          } else {
-            const response = await createCartHandler(params);
-            // If response is 200, add cardId, remove sessionToken and add the  new cart to carts
-            if (response.cart.cartId) {
-              params.cartId = response.cart.cartId;
-              delete params.sessionToken;
-              setCarts((carts) => [...carts, params]);
-              console.log('new carts:', carts);
+      <View style={styles.formWrap}>
+        <View style={styles.innerWrap}>
+          <Text style={{ textAlign: 'center' }}>
+            What would you like to add?
+          </Text>
+          <View style={styles.toggleWrap}>
+            <Pressable
+              onPress={() => {
+                setType(true);
+                setCurrentRating(5);
+              }}
+              style={
+                type
+                  ? {
+                      ...styles.toggle,
+                      borderColor: colors.green_1,
+                      backgroundColor: colors.green_1,
+                      borderBottomEndRadius: 0,
+                      borderTopEndRadius: 0,
+                    }
+                  : {
+                      ...styles.toggle,
+                      borderColor: colors.green_1,
+                      borderBottomEndRadius: 0,
+                      borderTopEndRadius: 0,
+                    }
+              }
+            >
+              <Text
+                style={type ? { color: 'white' } : { color: colors.green_1 }}
+              >
+                Task
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setType(false);
+                setCurrentRating(10);
+              }}
+              style={
+                type
+                  ? {
+                      ...styles.toggle,
+                      borderColor: colors.purple_1,
+                      borderBottomStartRadius: 0,
+                      borderTopStartRadius: 0,
+                    }
+                  : {
+                      ...styles.toggle,
+                      borderColor: colors.purple_1,
+                      backgroundColor: colors.purple_1,
+                      borderBottomStartRadius: 0,
+                      borderTopStartRadius: 0,
+                    }
+              }
+            >
+              <Text
+                style={type ? { color: colors.purple_1 } : { color: 'white' }}
+              >
+                Treat
+              </Text>
+            </Pressable>
+          </View>
+          <SafeAreaView>
+            <TextInput
+              style={styles.textInput}
+              placeholder={
+                type ? 'Describe your task...' : 'Describe your treat...'
+              }
+              onChangeText={setLabel}
+            />
+          </SafeAreaView>
+          {type ? (
+            <View style={styles.ratingWrap}>
+              <Text>Rate it</Text>
+              <Rating
+                type="star"
+                ratingCount={10}
+                imageSize={17}
+                tintColor={'white'}
+                onFinishRating={setCurrentRating}
+              />
+              <Text>{currentRating} / 10</Text>
+            </View>
+          ) : (
+            <View style={styles.ratingWrap}>
+              <Text>Rate it</Text>
+              <View style={styles.ratingTextInputWrap}>
+                <Image
+                  source={require('../assets/icons/star.png')}
+                  style={styles.starIcon}
+                />
 
-              // Navigate back to Tasks or Treats
-              if (type) {
-                navigation.navigate('Tasks');
-              } else {
-                navigation.navigate('Treats');
+                <Text>{currentRating}</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Pressable
+                  onPress={() => {
+                    currentRating > 1 && setCurrentRating(currentRating - 1);
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.changeRateButton,
+                      borderBottomEndRadius: 0,
+                      borderTopEndRadius: 0,
+                    }}
+                  >
+                    <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                      -
+                    </Text>
+                  </View>
+                </Pressable>
+                <Pressable
+                  onPress={() => {
+                    currentRating < 999 && setCurrentRating(currentRating + 1);
+                  }}
+                >
+                  <View
+                    style={{
+                      ...styles.changeRateButton,
+                      borderBottomStartRadius: 0,
+                      borderTopStartRadius: 0,
+                    }}
+                  >
+                    <Text style={{ color: 'white', fontSize: font.size_3 }}>
+                      +
+                    </Text>
+                  </View>
+                </Pressable>
+              </View>
+            </View>
+          )}
+        </View>
+        <Pressable
+          style={styles.createButton}
+          onPress={async () => {
+            if (!label) {
+              Alert.alert(
+                '🤔 Description is missing',
+                `Click into "describe your ${
+                  type ? 'task' : 'treat'
+                } ..." and give it some text!`,
+              );
+            } else {
+              const response = await createCartHandler(params);
+              // If response is 200, add cardId, remove sessionToken and add the  new cart to carts
+              if (response.cart.cartId) {
+                params.cartId = response.cart.cartId;
+                delete params.sessionToken;
+                setCarts((carts) => [...carts, params]);
+                console.log('new carts:', carts);
+
+                // Navigate back to Tasks or Treats
+                if (type) {
+                  navigation.navigate('Tasks');
+                } else {
+                  navigation.navigate('Treats');
+                }
               }
             }
-          }
-        }}
-      >
-        <Text style={{ color: 'white' }}>Create</Text>
-      </Pressable>
+          }}
+        >
+          <Text style={{ color: 'white' }}>Create</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -278,8 +294,22 @@ const screenDimensions = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   screen: {
-    padding: spacing.large_1,
     flex: 1,
+  },
+  headerWrap: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: spacing.medium_1,
+    backgroundColor: colors.black,
+    borderBottomColor: colors.greyBorder,
+    borderBottomWidth: 2,
+  },
+  headerText: {
+    marginTop: spacing.large_2,
+    fontSize: font.size_3,
+    color: 'white',
+  },
+  formWrap: {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

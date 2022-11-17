@@ -1,7 +1,7 @@
 import Lottie from 'lottie-react-native';
 import { useContext } from 'react';
 import { Image, Text, View } from 'react-native';
-import budgetContext from '../utils/BudgetContext';
+import budgetContext from '../utils/context/BudgetContext';
 import Global from '../utils/globals';
 import { font, spacing } from '../utils/styleConstants';
 

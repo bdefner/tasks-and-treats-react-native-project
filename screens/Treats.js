@@ -15,7 +15,7 @@ import ConditionalRuler from '../components/ConditionalRuler';
 import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import TaskItem from '../components/TaskItem';
 import TreatItem from '../components/TreatItem';
-import CartsContext from '../utils/CartsContext';
+import CartsContext from '../utils/context/CartsContext';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 function filterCartsForPersonalActiveTreats(carts) {
@@ -39,8 +39,8 @@ function FillEmptyScreen(props) {
     return (
       <View style={styles.createFirstWrap}>
         <Image
-          source={require('../assets/grafics/create-first-task.png')}
-          style={{ width: 248, height: 415 }}
+          source={require('../assets/grafics/create-first-treat.png')}
+          style={{ width: 255, height: 425 }}
         />
       </View>
     );
@@ -103,23 +103,25 @@ export default function TaskList({ route }) {
                 statusId={cart.statusId}
                 cartId={cart.cartId}
                 rating={cart.rating}
+                key={cart.id}
               />
             );
           })}
           {
             <ConditionalRuler
-              label="😎 see what you've done 👇"
+              label="😎 that's how you treat yourself 👇"
               condition={currentInactiveCarts[0]}
             />
           }
           {currentInactiveCarts.map((cart) => {
             return (
-              <TaskItem
+              <TreatItem
                 text={cart.label}
                 typeId={cart.typeId}
                 statusId={cart.statusId}
                 cartId={cart.cartId}
                 rating={cart.rating}
+                key={cart.id}
               />
             );
           })}
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
 
   headerText: {
     marginTop: spacing.large_2,
-    fontSize: font.size_4,
+    fontSize: font.size_3,
     color: 'white',
   },
 });

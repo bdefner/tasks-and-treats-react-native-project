@@ -3,10 +3,9 @@ import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import budgetContext from '../utils/BudgetContext';
-import CartsContext from '../utils/CartsContext';
+import budgetContext from '../utils/context/BudgetContext';
+import CartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals';
-import UserContext from '../utils/UserContext';
 
 async function StoreSessionTokenInGlobal() {
   Global.sessionToken = await SecureStore.getItemAsync('sessionToken');
@@ -85,7 +84,7 @@ export default function FetchUserDataAndRedirect({ route }) {
 
   setTimeout(() => {
     navigation.navigate('TabBar', { user: route.params.user });
-  }, 3100);
+  }, 2600);
 
   return (
     <Lottie

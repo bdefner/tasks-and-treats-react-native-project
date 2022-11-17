@@ -8,27 +8,21 @@ import LoginScreen from './screens/LoginScreen';
 import SecureLogoutScreen from './screens/SecureLogoutScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-import BudgetContext from './utils/BudgetContext';
-import CartsContext from './utils/CartsContext';
-import UserContext from './utils/UserContext';
+import BudgetContext from './utils/context/BudgetContext';
+import CartsContext from './utils/context/CartsContext';
+import UserContext from './utils/context/UserContext';
 
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cartsX, setCartsX] = useState([]);
+  const [carts, setCarts] = useState([]);
   const [budget, setBudget] = useState(0);
 
   return (
     <UserContext.Provider>
       <BudgetContext.Provider value={[budget, setBudget]}>
-        <CartsContext.Provider value={[cartsX, setCartsX]}>
-          <Stack.Navigator
-            initialRouteName={isLoggedIn ? 'TabBar' : 'WelcomeScreen'}
-            // screenOptions={{
-            //   headerShown: false,
-            // }}
-          >
+        <CartsContext.Provider value={[carts, setCarts]}>
+          <Stack.Navigator initialRouteName={'WelcomeScreen'}>
             <Stack.Screen
               name="WelcomeScreen"
               component={WelcomeScreen}
@@ -58,33 +52,13 @@ function AuthStack() {
   );
 }
 
-// function AuthenticatedStack() {
-//   return (
-//     <Stack.Navigator
-//       screenOptions={{
-//         headerStyle: { backgroundColor: Colors.primary500 },
-//         headerTintColor: 'white',
-//         contentStyle: { backgroundColor: Colors.primary100 },
-//       }}
-//     >
-//       <Stack.Screen name="TabBar" component={TabBar} />
-//     </Stack.Navigator>
-//   );
-// }
-
-function Navigation() {
-  return (
-    <NavigationContainer>
-      <AuthStack />
-    </NavigationContainer>
-  );
-}
-
 export default function App() {
   return (
     <>
-      <StatusBar style="dark" />
-      <Navigation />
+      <StatusBar style="light" />
+      <NavigationContainer>
+        <AuthStack />
+      </NavigationContainer>
     </>
   );
 }
