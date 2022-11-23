@@ -3,6 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import { useEffect, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
+import globals from '../utils/globals';
 import { spacing } from '../utils/styleConstants';
 
 export default function AddConnection() {
@@ -12,7 +13,7 @@ export default function AddConnection() {
 
   useEffect(() => {
     async function fetchSessionToken() {
-      const apiBaseUrl = 'http://localhost:3000/api/auth';
+      const apiUrl = `${globals.apiBaseUrl}/auth`;
       const token = await SecureStore.getItemAsync('sessionToken');
       console.log('token', token);
 
@@ -24,7 +25,7 @@ export default function AddConnection() {
         // Get the user (username, userId, userEmail)
 
         try {
-          const response = await fetch(apiBaseUrl, {
+          const response = await fetch(apiUrl, {
             method: 'POST',
             header: {
               Accept: 'application/json',

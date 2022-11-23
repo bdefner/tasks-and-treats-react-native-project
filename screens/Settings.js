@@ -15,7 +15,12 @@ export default function Settings() {
     <View style={styles.screen}>
       <ScrollView style={styles.scrollableWrap}>
         <View style={styles.menuCategoryWrap}>
-          <Pressable style={styles.menuItemWrap} onPress={() => {}}>
+          <Pressable
+            style={styles.menuItemWrap}
+            onPress={() => {
+              navigation.navigate('Profile');
+            }}
+          >
             <View>
               <Image
                 source={require('../assets/icons/profile.png')}

@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AboutScreen from '../screens/AboutScreen';
-import AddFriend from '../screens/AddFriend';
 import Challenges from '../screens/Challenges';
 import CreateNew from '../screens/CreateNew';
+import ProfileScreen from '../screens/ProfileScreen';
 import Settings from '../screens/Settings';
 import Tasks from '../screens/Tasks';
 import Treats from '../screens/Treats';
@@ -22,15 +22,17 @@ function CreateNewStackScreen() {
         component={CreateNew}
         options={{ headerShown: false }}
       />
-      <CreateNewStack.Screen name="AddFriend" component={AddFriend} />
     </CreateNewStack.Navigator>
   );
 }
 function SettingsStackScreen() {
+  console.log('params in settings stack:');
+
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={Settings} />
       <SettingsStack.Screen name="About" component={AboutScreen} />
+      <SettingsStack.Screen name="Profile" component={ProfileScreen} />
     </SettingsStack.Navigator>
   );
 }
@@ -52,6 +54,7 @@ export default function TabBar({ route }) {
       <Tab.Screen
         name="SettingsStack"
         component={SettingsStackScreen}
+        initialParams={{ user: route.params.user }}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapWithIcon}>

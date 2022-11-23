@@ -12,6 +12,7 @@ import { Rating } from 'react-native-ratings';
 import budgetContext from '../utils/context/BudgetContext';
 import cartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals.js';
+import globals from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 function getTintColorBasedOnStatusAndType(typeId, statusId) {
@@ -50,10 +51,9 @@ async function updateCartHandler(params) {
 }
 
 async function deleteCartHandler(params) {
-  const apiBaseUrl = 'http://localhost:3000/api/deletecart';
-
+  const apiUrl = `${globals.apiBaseUrl}/deletecart`;
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -84,7 +84,8 @@ export default function TaskList(props) {
   const [carts, setCarts] = useContext(cartsContext);
 
   async function updateBudget(budget, params) {
-    const apiBaseUrl = 'http://localhost:3000/api/updateuser';
+    const apiBaseUrl =
+      'https://tasks-and-treats-backend.fly.dev/api/updateuser';
     // Update the budget on the database
 
     console.log('params: ', params);

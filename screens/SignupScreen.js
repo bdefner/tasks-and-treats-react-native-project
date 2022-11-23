@@ -10,13 +10,14 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import globals from '../utils/globals';
 import { buttonStyles, colors, font, spacing } from '../utils/styleConstants';
 
 async function signupHandler(username, email, passwordHash) {
-  const apiBaseUrl = 'http://localhost:3000/api/signup';
+  const apiUrl = `${globals.apiBaseUrl}/signup`;
 
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

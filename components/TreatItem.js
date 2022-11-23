@@ -11,6 +11,7 @@ import {
 import budgetContext from '../utils/context/BudgetContext';
 import cartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals.js';
+import globals from '../utils/globals.js';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 function getTintColorBasedOnStatus(typeId, statusId) {
@@ -19,10 +20,9 @@ function getTintColorBasedOnStatus(typeId, statusId) {
 }
 
 async function updateCartHandler(params) {
-  const apiBaseUrl = 'http://localhost:3000/api/updatecart';
-
+  const apiUrl = `${globals.apiBaseUrl}/updatecart`;
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -47,8 +47,7 @@ async function updateCartHandler(params) {
 }
 
 async function deleteCartHandler(params) {
-  const apiBaseUrl = 'http://localhost:3000/api/deletecart';
-
+  const apiBaseUrl = `${globals.apiBaseUrl}/deletecart`;
   try {
     const response = await fetch(apiBaseUrl, {
       method: 'POST',
@@ -81,7 +80,7 @@ export default function TaskList(props) {
   const [carts, setCarts] = useContext(cartsContext);
 
   async function updateBudget(budget, params) {
-    const apiBaseUrl = 'http://localhost:3000/api/updateuser';
+    const apiBaseUrl = `${globals.apiBaseUrl}/updateuser`;
     // Update the budget on the database
 
     try {

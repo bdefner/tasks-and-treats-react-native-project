@@ -13,13 +13,13 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import globals from '../utils/globals';
 import { buttonStyles, colors, spacing } from '../utils/styleConstants';
 
 async function handleLogin(username, password) {
-  const apiBaseUrl = 'http://localhost:3000/api/login';
-
+  const apiUrl = `${globals.apiBaseUrl}/login`;
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       header: {
         Accept: 'application/json',

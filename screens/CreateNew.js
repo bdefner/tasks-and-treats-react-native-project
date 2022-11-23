@@ -17,13 +17,11 @@ import { Rating } from 'react-native-ratings';
 import { TypeFlags } from 'typescript';
 import CartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals';
+import globals from '../utils/globals';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 async function createCartHandler(params) {
-  const apiBaseUrl = 'http://localhost:3000/api/createcart';
-
-  console.log('params', params);
-
+  const apiBaseUrl = `${globals.apiBaseUrl}/createcart`;
   try {
     const response = await fetch(apiBaseUrl, {
       method: 'POST',
@@ -57,7 +55,7 @@ async function createCartHandler(params) {
 export default function CreateNew({ route }) {
   const [carts, setCarts] = useContext(CartsContext);
 
-  // If category is true, it's a tasks, else it's a treat
+  // If type is true, it's a tasks, else it's a treat
   const [type, setType] = useState(true);
   const [currentRating, setCurrentRating] = useState(5);
   const [label, setLabel] = useState('');
@@ -189,6 +187,7 @@ export default function CreateNew({ route }) {
                 type ? 'Describe your task...' : 'Describe your treat...'
               }
               onChangeText={setLabel}
+              value={label}
             />
           </SafeAreaView>
           {type ? (
@@ -199,6 +198,7 @@ export default function CreateNew({ route }) {
                 ratingCount={10}
                 imageSize={17}
                 tintColor={'white'}
+                defaultRating={currentRating}
                 onFinishRating={setCurrentRating}
               />
               <Text>{currentRating} / 10</Text>
@@ -271,7 +271,7 @@ export default function CreateNew({ route }) {
                 delete params.sessionToken;
                 setCarts((carts) => [...carts, params]);
                 console.log('new carts:', carts);
-
+                setLabel('');
                 // Navigate back to Tasks or Treats
                 if (type) {
                   navigation.navigate('Tasks');

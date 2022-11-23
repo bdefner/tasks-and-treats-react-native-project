@@ -5,7 +5,6 @@ import Global from '../utils/globals';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Challenges() {
-  console.log('Global.allChallenges: ', Global.allChallenges);
   return (
     <>
       <View style={styles.screen}>

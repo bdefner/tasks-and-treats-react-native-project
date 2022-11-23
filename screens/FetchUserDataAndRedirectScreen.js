@@ -6,13 +6,14 @@ import { StyleSheet, View } from 'react-native';
 import budgetContext from '../utils/context/BudgetContext';
 import CartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals';
+import globals from '../utils/globals';
 
 async function StoreSessionTokenInGlobal() {
   Global.sessionToken = await SecureStore.getItemAsync('sessionToken');
 }
 
 async function fetchUserCarts(userId) {
-  const apiBaseUrl = 'http://localhost:3000/api/getcarts';
+  const apiBaseUrl = 'https://tasks-and-treats-backend.fly.dev/api/getcarts';
 
   try {
     const response = await fetch(apiBaseUrl, {
@@ -35,10 +36,10 @@ async function fetchUserCarts(userId) {
 }
 
 async function FetchChallenges(userId, sessionToken) {
-  const apiBaseUrl = 'http://localhost:3000/api/getchallenges';
+  const apiUrl = `${globals.apiBaseUrl}/getchallenges`;
 
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       header: {
         Accept: 'application/json',
@@ -64,7 +65,9 @@ export default function FetchUserDataAndRedirect({ route }) {
 
   const [carts, setCarts] = useContext(CartsContext);
   const [budget, setBudget] = useContext(budgetContext);
+  // const [user, setUser] = useContext(userContext);
 
+  // const [a, setA] = useContext(aContext);
   // Storing user information in ../utils/global.js
 
   Global.username = route.params.user.username;
