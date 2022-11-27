@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "expo-app",
-    "slug": "expo-app",
+    "name": "Tasks-and-Treats",
+    "slug": "tasks-and-treats",
+    "description": "A get-things-done app, that's fun to use. Give yourself tasks and trade them for your treats :) ",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,13 +19,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.beppino.tasks-and-treats"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.beppino.tasksandtreats"
     },
     "web": {
       "favicon": "./assets/favicon.png"

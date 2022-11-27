@@ -1,5 +1,6 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useCavy } from 'cavy';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { LogBox } from 'react-native';
@@ -9,11 +10,8 @@ import LoginScreen from './screens/LoginScreen';
 import SecureLogoutScreen from './screens/SecureLogoutScreen';
 import SignupScreen from './screens/SignupScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
-// import AContext from './utils/context/AContext';
 import BudgetContext from './utils/context/BudgetContext';
 import CartsContext from './utils/context/CartsContext';
-
-// import UserContext from './utils/context/UserContext';
 
 LogBox.ignoreAllLogs(); //Ignore all log notifications
 
@@ -23,11 +21,14 @@ function AuthStack() {
   const [carts, setCarts] = useState([]);
   const [budget, setBudget] = useState(0);
 
+  const generateTestHook = useCavy();
+
   return (
     <BudgetContext.Provider value={[budget, setBudget]}>
       <CartsContext.Provider value={[carts, setCarts]}>
         <Stack.Navigator initialRouteName={'WelcomeScreen'}>
           <Stack.Screen
+            ref={generateTestHook('Welcome.Screen')}
             name="WelcomeScreen"
             component={WelcomeScreen}
             options={{ headerShown: false }}

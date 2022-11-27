@@ -12,11 +12,10 @@ import globals from '../utils/globals';
 import { colors, spacing } from '../utils/styleConstants';
 
 export default function Profile() {
-  console.log('global.username', globals.username);
   const [isEditing, setIsEditing] = useState(false);
 
   return (
-    <View style={styles.menuCategoryWrap}>
+    <View style={styles.screenContentWrap}>
       <View>
         <View style={{ alignItems: 'center' }}>
           <Image
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.greyBorder,
     borderBottomWidth: 1,
   },
-  menuCategoryWrap: {
+  screenContentWrap: {
     margin: spacing.medium_1,
     borderRadius: spacing.small,
     backgroundColor: 'white',

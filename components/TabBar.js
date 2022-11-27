@@ -3,8 +3,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AboutScreen from '../screens/AboutScreen';
+import AppearanceScreen from '../screens/AppearanceScreen';
 import Challenges from '../screens/Challenges';
+import ConnectionsScreen from '../screens/ConnectionsScreen';
 import CreateNew from '../screens/CreateNew';
+import NotificationsScreen from '../screens/NotificationsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Settings from '../screens/Settings';
 import Tasks from '../screens/Tasks';
@@ -33,6 +36,12 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="Settings" component={Settings} />
       <SettingsStack.Screen name="About" component={AboutScreen} />
       <SettingsStack.Screen name="Profile" component={ProfileScreen} />
+      <SettingsStack.Screen name="Appearance" component={AppearanceScreen} />
+      <SettingsStack.Screen
+        name="Notifications"
+        component={NotificationsScreen}
+      />
+      <SettingsStack.Screen name="Connections" component={ConnectionsScreen} />
     </SettingsStack.Navigator>
   );
 }

@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { useCavy } from 'cavy';
 import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ export default function AddConnection() {
   const [tryToLogIn, setTryToLogIn] = useState(true);
 
   const navigation = useNavigation();
+  const generateTestHook = useCavy();
 
   useEffect(() => {
     async function fetchSessionToken() {
@@ -70,6 +72,7 @@ export default function AddConnection() {
         <View style={styles.buttonWrap}>
           <View style={styles.button}>
             <Button
+              ref={generateTestHook('Login.Button')}
               title="Login"
               onPress={() => {
                 navigation.navigate('Login');

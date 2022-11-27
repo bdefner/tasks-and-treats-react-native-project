@@ -23,7 +23,7 @@ function getTintColorBasedOnStatusAndType(typeId, statusId) {
 }
 
 async function updateCartHandler(params) {
-  const apiBaseUrl = 'http://localhost:3000/api/updatecart';
+  const apiBaseUrl = `${globals.apiBaseUrl}/updatecart`;
 
   try {
     const response = await fetch(apiBaseUrl, {

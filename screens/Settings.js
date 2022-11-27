@@ -33,7 +33,30 @@ export default function Settings() {
           </Pressable>
         </View>
         <View style={styles.menuCategoryWrap}>
-          <Pressable style={styles.menuItemWrap} onPress={() => {}}>
+          <Pressable
+            style={styles.menuItemWrap}
+            onPress={() => {
+              navigation.navigate('Connections');
+            }}
+          >
+            <View>
+              <Image
+                source={require('../assets/icons/connections.png')}
+                style={{ ...styles.icons, tintColor: colors.green_1 }}
+              />
+            </View>
+            <View>
+              <Text style={{ fontSize: font.size_2 }}>Connections</Text>
+            </View>
+          </Pressable>
+        </View>
+        <View style={styles.menuCategoryWrap}>
+          <Pressable
+            style={styles.menuItemWrap}
+            onPress={() => {
+              navigation.navigate('Appearance');
+            }}
+          >
             <View>
               <Image
                 source={require('../assets/icons/appearance.png')}
@@ -44,7 +67,12 @@ export default function Settings() {
               <Text style={{ fontSize: font.size_2 }}>Appearance</Text>
             </View>
           </Pressable>
-          <Pressable style={styles.menuItemWrap} onPress={() => {}}>
+          <Pressable
+            style={styles.menuItemWrap}
+            onPress={() => {
+              navigation.navigate('Notifications');
+            }}
+          >
             <View>
               <Image
                 source={require('../assets/icons/alert.png')}
