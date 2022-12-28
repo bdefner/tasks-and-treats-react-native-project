@@ -7,6 +7,7 @@ import AppearanceScreen from '../screens/AppearanceScreen';
 import Challenges from '../screens/Challenges';
 import ConnectionsScreen from '../screens/ConnectionsScreen';
 import CreateNew from '../screens/CreateNew';
+import DashboardScreen from '../screens/DashboardScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Settings from '../screens/Settings';
@@ -61,30 +62,6 @@ export default function TabBar({ route }) {
       }}
     >
       <Tab.Screen
-        name="SettingsStack"
-        component={SettingsStackScreen}
-        initialParams={{ user: route.params.user }}
-        options={{
-          tabBarIcon: (focused) => (
-            <View style={styles.tabBarWrapWithIcon}>
-              <Image
-                source={require('../assets/icons/settings.png')}
-                resizeMode="contain"
-                style={styles.navIconStyle}
-              />
-              <Text
-                style={{
-                  color: focused ? colors.black : 'blue',
-                  fontSize: 10,
-                }}
-              >
-                Settings
-              </Text>
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Tasks"
         component={Tasks}
         initialParams={{ carts: carts }}
@@ -110,28 +87,7 @@ export default function TabBar({ route }) {
           ),
         }}
       />
-      <Tab.Screen
-        name="New"
-        component={CreateNewStackScreen}
-        initialParams={{ user: route.params.user }}
-        options={{
-          headerShown: false,
-          tabBarIcon: (focused) => (
-            <View style={styles.tabBarWrapCreateNew}>
-              <Image
-                source={require('../assets/icons/createNew.png')}
-                resizeMode="contain"
-                style={{
-                  width: 40,
-                  height: 40,
-                  tintColor: focused ? colors.black : 'blue',
-                  margin: 3,
-                }}
-              />
-            </View>
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Treats"
         component={Treats}
@@ -152,9 +108,60 @@ export default function TabBar({ route }) {
           ),
         }}
       />
+
+      <Tab.Screen
+        name="New"
+        component={CreateNewStackScreen}
+        initialParams={{ user: route.params.user }}
+        options={{
+          tabBarIcon: (focused) => (
+            <View style={styles.tabBarWrapWithIcon}>
+              <Image
+                source={require('../assets/icons/add.png')}
+                resizeMode="contain"
+                style={styles.navIconStyle}
+              />
+              <Text
+                style={{
+                  color: focused ? colors.black : 'blue',
+                  fontSize: 10,
+                }}
+              >
+                Add new
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        initialParams={{ user: route.params.user }}
+        options={{
+          tabBarIcon: (focused) => (
+            <View style={styles.tabBarWrapWithIcon}>
+              <Image
+                source={require('../assets/icons/dashboard.png')}
+                resizeMode="contain"
+                style={styles.navIconStyle}
+              />
+              <Text
+                style={{
+                  color: focused ? colors.black : 'blue',
+                  fontSize: 10,
+                }}
+              >
+                Dashboard
+              </Text>
+            </View>
+          ),
+        }}
+      />
       <Tab.Screen
         name="Challenges"
         component={Challenges}
+        initialParams={{ user: route.params.user }}
+        user={route.params.user}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapWithIcon}>
@@ -170,6 +177,30 @@ export default function TabBar({ route }) {
                 }}
               >
                 Challenges
+              </Text>
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SettingsStack"
+        component={SettingsStackScreen}
+        initialParams={{ user: route.params.user }}
+        options={{
+          tabBarIcon: (focused) => (
+            <View style={styles.tabBarWrapWithIcon}>
+              <Image
+                source={require('../assets/icons/settings.png')}
+                resizeMode="contain"
+                style={styles.navIconStyle}
+              />
+              <Text
+                style={{
+                  color: focused ? colors.black : 'blue',
+                  fontSize: 10,
+                }}
+              >
+                Settings
               </Text>
             </View>
           ),

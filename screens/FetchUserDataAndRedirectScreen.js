@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
 import Lottie from 'lottie-react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import budgetContext from '../utils/context/BudgetContext';
 import CartsContext from '../utils/context/CartsContext';
 import Global from '../utils/globals';
@@ -13,10 +13,10 @@ async function StoreSessionTokenInGlobal() {
 }
 
 async function fetchUserCarts(userId) {
-  const apiBaseUrl = 'https://tasks-and-treats-backend.fly.dev/api/getcarts';
+  const apiUrl = `${globals.apiBaseUrl}/getcarts`;
 
   try {
-    const response = await fetch(apiBaseUrl, {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       header: {
         Accept: 'application/json',
@@ -72,6 +72,7 @@ export default function FetchUserDataAndRedirect({ route }) {
 
   Global.username = route.params.user.username;
   Global.userId = route.params.user.userId;
+  Global.inviteToken = route.params.user.inviteToken;
   // Global.budget = route.params.user.budget;
 
   StoreSessionTokenInGlobal();
@@ -89,12 +90,26 @@ export default function FetchUserDataAndRedirect({ route }) {
     navigation.navigate('TabBar', { user: route.params.user });
   }, 2600);
 
+  console.log(
+    'route.params.promotionUser in FetchData...:',
+    route.params.promotionUser,
+  );
   return (
-    <Lottie
-      source={require('../assets/grafics/successAnimation.json')}
-      autoPlay
-      loop={false}
-    />
+    <View style={styles.screen}>
+      <View style={{ position: 'absolute', top: 200 }}>
+        {route.params.promotionUser && (
+          <Text style={{ fontSize: 24 }}>
+            🤩 {route.params.promotionUser} just received 10 stars!
+          </Text>
+        )}
+      </View>
+
+      <Lottie
+        source={require('../assets/grafics/successAnimation.json')}
+        autoPlay
+        loop={false}
+      />
+    </View>
   );
 }
 

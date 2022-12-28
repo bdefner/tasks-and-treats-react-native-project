@@ -1,5 +1,27 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, Share, StyleSheet, Text, View } from 'react-native';
+import Global from '../utils/globals';
 import { colors, font, shadow, spacing } from '../utils/styleConstants';
+
+async function onShare(username, inviteToken) {
+  try {
+    const result = await Share.share({
+      message: `Get things done the fun way! 🥳
+      With this free and fun app for procrastination lovers! Use the code "${inviteToken}" on registration and help ${username} to get a reward!`,
+      url: 'exp://exp.host/@beppino/tasks-and-treats',
+    });
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+}
 
 export default function ChallengeItem(challenge) {
   const sign = Math.sign(challenge.item.reward) === 1 && '+';
@@ -27,6 +49,35 @@ export default function ChallengeItem(challenge) {
       </View>
       <View style={styles.descriptionWrap}>
         <Text style={styles.description}>{challenge.item.description}</Text>
+        {challenge.item.challengeId === 1 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                ...styles.labelWrap,
+                backgroundColor:
+                  Math.sign(challenge.item.reward) === 1
+                    ? colors.green_2
+                    : colors.purple_2,
+              }}
+            >
+              <Text style={{ color: 'white', fontWeight: '700' }}>
+                {Global.inviteToken}
+              </Text>
+            </View>
+            <Pressable
+              onPress={() => onShare(Global.username, Global.inviteToken)}
+              style={styles.inMessageButton}
+            >
+              <Text style={{ color: 'white' }}>Copy & Share</Text>
+            </Pressable>
+          </View>
+        )}
       </View>
 
       <View style={styles.bottomViewWrap}>
@@ -40,10 +91,14 @@ export default function ChallengeItem(challenge) {
             {challenge.item.reward}
           </Text>
         </View>
-        <Image
-          source={require('../assets/icons/not-done.png')}
-          style={styles.doneIcon}
-        />
+        {challenge.item.challengeId === 1 ? (
+          <Text style={{ color: 'white' }}>use it often!</Text>
+        ) : (
+          <Image
+            source={require('../assets/icons/not-done.png')}
+            style={styles.doneIcon}
+          />
+        )}
       </View>
     </View>
   );
@@ -65,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   challengeWrap: {
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     borderRadius: spacing.small,
     margin: spacing.medium_1,
     marginTop: spacing.large_2,
@@ -92,6 +147,7 @@ const styles = StyleSheet.create({
   bottomViewWrap: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   rewardWrap: {
     flexDirection: 'row',
@@ -112,5 +168,11 @@ const styles = StyleSheet.create({
     height: spacing.medium_2,
     marginTop: spacing.medium_1,
     tintColor: 'white',
+  },
+  inMessageButton: {
+    margin: spacing.small,
+    padding: spacing.small,
+    backgroundColor: colors.purple_1,
+    borderRadius: spacing.small,
   },
 });

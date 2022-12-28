@@ -7,6 +7,7 @@ export const spacing = {
   medium_3: 32,
   large_1: 42,
   large_2: 48,
+  large_3: 62,
 };
 
 export const colors = {

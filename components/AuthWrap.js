@@ -8,7 +8,7 @@ import globals from '../utils/globals';
 import { spacing } from '../utils/styleConstants';
 
 export default function AddConnection() {
-  const [tryToLogIn, setTryToLogIn] = useState(true);
+  const [tryToLogIn, setTryToLogIn] = useState(false);
 
   const navigation = useNavigation();
   const generateTestHook = useCavy();
@@ -17,13 +17,13 @@ export default function AddConnection() {
     async function fetchSessionToken() {
       const apiUrl = `${globals.apiBaseUrl}/auth`;
       const token = await SecureStore.getItemAsync('sessionToken');
-      console.log('token', token);
 
       if (!token) {
         setTryToLogIn(false);
       }
 
       if (token) {
+        setTryToLogIn(true);
         // Get the user (username, userId, userEmail)
 
         try {
@@ -40,11 +40,12 @@ export default function AddConnection() {
           });
           const json = await response.json();
 
-          console.log('json.user', json.user);
-
           // Major TODO!! If json.user = undefined, then the token is not valid and needs to be deleted! Afterwards tryToLogIn is to be set to false
-
+          if (!json.user) {
+            setTryToLogIn(false);
+          }
           if (json.user) {
+            console.log('user in AuthScreen: ', json.user);
             // Navigate to FetchUserDataAndRedirect sending userId
 
             // Note: The timeout is only for a smoother UX
@@ -57,7 +58,9 @@ export default function AddConnection() {
           }
         } catch (error) {
           console.error(error);
+          setTryToLogIn(false);
         }
+        setTryToLogIn(false);
       }
     }
 
@@ -66,9 +69,7 @@ export default function AddConnection() {
 
   return (
     <>
-      {tryToLogIn ? (
-        <></>
-      ) : (
+      {!tryToLogIn && (
         <View style={styles.buttonWrap}>
           <View style={styles.button}>
             <Button

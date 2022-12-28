@@ -53,6 +53,8 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordTest, setPasswordTest] = useState('');
+  const [promotionCode, setPromotionCode] = useState('');
+  const [showPromotionInput, setShowPromotionInput] = useState(false);
 
   const [errorMessage, setErrorMessage] = useState('');
   const [infoTextVisible, setInfoTextVisible] = useState(false);
@@ -67,6 +69,7 @@ export default function Signup() {
           style={styles.welcomeImg}
         />
         <Text style={styles.errorMessage}>{errorMessage}</Text>
+        <View style={{ justifyContent: 'center' }}></View>
         <View style={styles.inputFieldWrap}>
           <TextInput
             style={styles.inputField}
@@ -87,6 +90,7 @@ export default function Signup() {
             autoComplete="email"
           />
         </View>
+
         <View style={styles.inputFieldWrap}>
           <TextInput
             style={styles.inputField}
@@ -121,7 +125,7 @@ export default function Signup() {
                   'Something went wrong. Please check your internet connection and try again.',
                 );
               } else {
-                navigation.replace('FetchUserDataAndRedirect', {
+                navigation.replace('AfterRegistration', {
                   user: userData,
                 });
               }

@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { LogBox } from 'react-native';
 import TabBar from './components/TabBar';
+import AfterRegistrationScreen from './screens/AfterRegistrationScreen';
 import FetchUserDataAndRedirectScreen from './screens/FetchUserDataAndRedirectScreen';
 import LoginScreen from './screens/LoginScreen';
 import SecureLogoutScreen from './screens/SecureLogoutScreen';
@@ -36,6 +37,11 @@ function AuthStack() {
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen
+            name="AfterRegistration"
+            component={AfterRegistrationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="FetchUserDataAndRedirect"
             component={FetchUserDataAndRedirectScreen}
             options={{ headerShown: false }}
@@ -45,6 +51,7 @@ function AuthStack() {
             component={SecureLogoutScreen}
             options={{ headerShown: false }}
           />
+
           <Stack.Screen
             name="TabBar"
             component={TabBar}

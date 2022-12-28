@@ -4,7 +4,7 @@ import StarBudgetDisplay from '../components/StarBudgetDisplay';
 import Global from '../utils/globals';
 import { colors, font, spacing } from '../utils/styleConstants';
 
-export default function Challenges() {
+export default function Challenges({ route }) {
   return (
     <>
       <View style={styles.screen}>
@@ -23,6 +23,7 @@ export default function Challenges() {
             data={Global.allChallenges}
             renderItem={ChallengeItem}
             keyExtractor={(challenge) => challenge.challengeId}
+            initialParams={{ user: route.params.user }}
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           />
