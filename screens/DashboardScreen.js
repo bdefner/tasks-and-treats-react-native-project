@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import { useContext } from 'react';
 import {
   Image,
   Pressable,
@@ -6,11 +8,22 @@ import {
   Text,
   View,
 } from 'react-native';
+import CartsContext from '../utils/context/CartsContext';
 import globals from '../utils/globals';
 import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Dashboard({ route }) {
   const user = route.params.user;
+  const [carts, setCarts] = useContext(CartsContext);
+  const navigation = useNavigation();
+
+  const activeTasks = carts.filter((item) => {
+    return item.typeId === 1 && item.statusId === 1 && !item.groupId;
+  });
+
+  const activeTreats = carts.filter((item) => {
+    return item.typeId === 2 && item.statusId === 1 && !item.groupId;
+  });
 
   return (
     <ScrollView style={styles.screen}>
@@ -49,15 +62,30 @@ export default function Dashboard({ route }) {
         </View>
       </View>
       <View style={styles.chipWrap}>
-        <Pressable style={{ ...styles.chip, backgroundColor: colors.green_2 }}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('Tasks');
+          }}
+          style={{ ...styles.chip, backgroundColor: colors.green_2 }}
+        >
           <Text style={styles.chipHeading}>Tasks</Text>
-          <Text style={styles.chipCount}>5</Text>
+          <Text style={styles.chipCount}>{activeTasks.length}</Text>
         </Pressable>
-        <Pressable style={{ ...styles.chip, backgroundColor: colors.purple_2 }}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('Treats');
+          }}
+          style={{ ...styles.chip, backgroundColor: colors.purple_2 }}
+        >
           <Text style={styles.chipHeading}>Treats</Text>
-          <Text style={styles.chipCount}>5</Text>
+          <Text style={styles.chipCount}>{activeTreats.length}</Text>
         </Pressable>
-        <Pressable style={{ ...styles.chip, backgroundColor: colors.black }}>
+        <Pressable
+          onPress={() => {
+            navigation.navigate('Challenges');
+          }}
+          style={{ ...styles.chip, backgroundColor: colors.black }}
+        >
           <Text style={styles.chipHeading}>Challenges</Text>
           <Text style={styles.chipCount}>2 / 12</Text>
         </Pressable>

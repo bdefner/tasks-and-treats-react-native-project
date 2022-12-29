@@ -11,6 +11,7 @@ import { colors, font, spacing } from '../utils/styleConstants';
 
 export default function Settings() {
   const navigation = useNavigation();
+
   return (
     <View style={styles.screen}>
       <ScrollView style={styles.scrollableWrap}>
