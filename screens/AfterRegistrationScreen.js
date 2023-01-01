@@ -148,6 +148,11 @@ export default function AfterRegistration({ route }) {
           </Text>
         </Pressable>
         <Pressable
+          onPress={() =>
+            navigation.replace('FetchUserDataAndRedirect', {
+              user: route.params.user,
+            })
+          }
           style={{
             ...styles.selectionWrap,
             borderColor: 'black',

@@ -4,6 +4,7 @@ module.exports = {
   sessionToken: '',
   apiBaseUrl: 'http://localhost:3000/api',
   inviteToken: '',
+  connections: [{}],
 };
 
 // Local backend: http://localhost:3000/api

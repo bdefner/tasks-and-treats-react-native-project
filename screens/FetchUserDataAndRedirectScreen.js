@@ -59,21 +59,78 @@ async function FetchChallenges(userId, sessionToken) {
   }
 }
 
+async function FetchConnectionIds(userId, sessionToken) {
+  const apiUrl = `${globals.apiBaseUrl}/handleconnections`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      header: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        mode: 'no-cors',
+      },
+      body: JSON.stringify({
+        requestType: 'getConnections',
+        userId: userId,
+        sessionToken: sessionToken,
+      }),
+    });
+    const json = await response.json();
+
+    const connectionUserIds = json.map((item) => {
+      return item.userReceivedId === userId
+        ? item.userRequestedId
+        : item.userReceivedId;
+    });
+
+    return connectionUserIds;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function FetchConnectionUserData(userId, sessionToken, connectionId) {
+  const apiUrl = `${globals.apiBaseUrl}/handleconnections`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      header: {
+        Accept: 'application/json',
+        'content-type': 'application/json',
+        mode: 'no-cors',
+      },
+      body: JSON.stringify({
+        requestType: 'getConnectionsData',
+        userId: userId,
+        sessionToken: sessionToken,
+        connections: connectionId.toString(),
+      }),
+    });
+    const json = await response.json();
+
+    return json;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export default function FetchUserDataAndRedirect({ route }) {
   const navigation = useNavigation();
   const userId = route.params.user.userId;
 
   const [carts, setCarts] = useContext(CartsContext);
   const [budget, setBudget] = useContext(budgetContext);
-  // const [user, setUser] = useContext(userContext);
+  const [connectionIds, setConnectionIds] = useState([]);
+  const [connectionUserData, setConnectionUserData] = useState([{}]);
+  const connectionData = [{}];
 
-  // const [a, setA] = useContext(aContext);
   // Storing user information in ../utils/global.js
 
   Global.username = route.params.user.username;
   Global.userId = route.params.user.userId;
   Global.inviteToken = route.params.user.inviteToken;
-  // Global.budget = route.params.user.budget;
 
   StoreSessionTokenInGlobal();
 
@@ -84,16 +141,30 @@ export default function FetchUserDataAndRedirect({ route }) {
       route.params.user.userId,
       Global.sessionToken,
     );
+
+    const connectionIds = await FetchConnectionIds(
+      route.params.user.userId,
+      Global.sessionToken,
+    );
+
+    for (let i = 0; i < connectionIds.length; i++) {
+      connectionData[i] = await FetchConnectionUserData(
+        route.params.user.userId,
+        Global.sessionToken,
+        connectionIds[i],
+      );
+    }
+
+    globals.connections = connectionData;
   }, []);
 
   setTimeout(() => {
-    navigation.navigate('TabBar', { user: route.params.user });
+    navigation.navigate('TabBar', {
+      user: route.params.user,
+      connectionUserData: connectionData,
+    });
   }, 2600);
 
-  console.log(
-    'route.params.promotionUser in FetchData...:',
-    route.params.promotionUser,
-  );
   return (
     <View style={styles.screen}>
       <View style={{ position: 'absolute', top: 200 }}>

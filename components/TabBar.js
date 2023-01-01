@@ -30,8 +30,6 @@ function CreateNewStackScreen() {
   );
 }
 function SettingsStackScreen() {
-  console.log('params in settings stack:');
-
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen name="Settings" component={Settings} />
@@ -54,7 +52,7 @@ export default function TabBar({ route }) {
 
   return (
     <Tab.Navigator
-      initialRouteName="Tasks"
+      initialRouteName="Dashboard"
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: styles.tabBarStyle,
@@ -136,7 +134,10 @@ export default function TabBar({ route }) {
       <Tab.Screen
         name="Dashboard"
         component={DashboardScreen}
-        initialParams={{ user: route.params.user }}
+        initialParams={{
+          user: route.params.user,
+          connectionUserData: route.params.connectionUserData,
+        }}
         options={{
           tabBarIcon: (focused) => (
             <View style={styles.tabBarWrapWithIcon}>
